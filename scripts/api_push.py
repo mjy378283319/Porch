@@ -272,12 +272,21 @@ def main() -> int:
         log("远端已是最新，无需推送")
         return 0
 
-    # 1) 上传所有待推提交引用到的 blob（按内容 sha 去重）
+    # 1) 上传所有待推提交引用到的 blob（按内容 sha 去重；远端已有的跳过）
+    existing: set[str] = set()
+    if remote_head:
+        base_commit = api(token, "GET", f"/repos/{repo}/git/commits/{remote_head}") or {}
+        base_tree = base_commit.get("tree", {}).get("sha")
+        if base_tree:
+            listing = api(token, "GET",
+                          f"/repos/{repo}/git/trees/{base_tree}?recursive=1") or {}
+            existing = {e["sha"] for e in listing.get("tree", []) if e.get("type") == "blob"}
     needed: dict[str, str] = {}
     for sha in pending:
         for e in tree_entries(root, sha):
-            needed.setdefault(e["sha"], "@git")
-    log(f"待上传 blob: {len(needed)} 个（去重后）")
+            if e["sha"] not in existing:
+                needed.setdefault(e["sha"], "@git")
+    log(f"待上传 blob: {len(needed)} 个（去重后，远端已有 {len(existing)} 个跳过）")
     upload_blobs(repo, token, root, needed, args.jobs)
 
     # 2) 逐条重建 tree / commit

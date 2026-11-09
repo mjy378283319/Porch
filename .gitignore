@@ -45,3 +45,7 @@ pnpm-debug.log*
 Thumbs.db
 Desktop.ini
 .fnsync_temp_dir/
+
+# API 推送脚本的临时文件
+_msg.txt
+api_push.log

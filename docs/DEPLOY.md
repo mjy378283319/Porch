@@ -104,6 +104,26 @@ git tag v1.2.6 && git push origin v1.2.6
 Actions → Build & Publish Image (GHCR) → Run workflow → platforms: linux/amd64,linux/arm64,linux/arm/v7
 ```
 
+### 2.4 `git push` 不通时：走 GitHub API 推送
+
+国内网络下 `git push` 常见 `schannel: failed to receive handshake` 或
+`CONNECT tunnel failed, response 502`（git 端口被拦，但 `api.github.com` 正常）。
+此时用仓库自带的 API 推送脚本，它按本地提交链逐条重建 tree/commit，**远端 sha 与本地完全一致**：
+
+```bash
+python scripts/api_push.py --pat <你的PAT文件> --repo <owner>/FlatNas --jobs 8
+```
+
+- 只上传远端缺失的 blob（按内容 sha 去重），增量推送通常几十秒
+- 建 tree 后会校验返回的 tree sha 是否等于本地，`[ok]` 才继续
+- 触发限流（403）时自动按 `Retry-After` 退避重试
+- 首次推送会创建根提交；远端若只有一个初始化提交，会被本地链覆盖（`force`）
+
+> PAT 权限：fine-grained 需勾 `Contents: Read and write`；
+> 还要在 `Settings → Actions → General` 把 Workflow permissions 设为
+> **Read and write**，否则 GHCR 推送会 403。
+> 建仓库用 classic PAT（`repo` scope）或网页手动创建，fine-grained 令牌不一定有创建权限。
+
 ---
 
 ## 3. Unraid 部署
