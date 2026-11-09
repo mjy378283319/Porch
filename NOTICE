@@ -1,0 +1,21 @@
+FlatNas
+Copyright (C) Garry-QD and contributors
+Upstream: https://github.com/Garry-QD/FlatNas
+License: GNU Affero General Public License v3.0 (see LICENSE)
+
+This repository is a fork of the upstream project, maintained for self-hosted
+Docker / Unraid deployment. Modifications in this fork are limited to:
+
+  - removal of packaging artifacts, sample media and build outputs from the repo
+  - rewritten Dockerfile (three-stage build, healthcheck, OCI labels)
+  - GHCR-based multi-arch CI workflow (replacing the Docker Hub workflow)
+  - added Unraid compose file and CA template, and deployment documentation
+
+All application logic, UI, data formats and APIs originate from the upstream
+project and remain under AGPLv3.
+
+Because FlatNas is licensed under AGPLv3, any distribution of this software --
+including running a modified version as a network service -- requires that the
+complete corresponding source code be made available to users, and that this
+license and copyright notice be preserved. If you redistribute this fork,
+keep this repository publicly accessible.

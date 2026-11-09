@@ -1,0 +1,41 @@
+# Git / CI
+.git
+.gitignore
+.github
+
+# Docker
+docker-compose*.yml
+.env
+.env.*
+.dockerignore
+
+# 依赖
+node_modules
+frontend/node_modules
+
+# 构建产物
+frontend/dist
+frontend/tmp
+backend/build
+backend/flatnas-backend
+backend/flatnas-server
+backend/*.exe
+debian
+
+# 运行期数据（镜像内自建空目录，不打包用户数据）
+server/data/*
+server/doc/*
+server/music/*
+server/PC/*
+server/APP/*
+server/public/*
+
+# 文档与素材（不参与构建）
+docs
+unraid
+public
+*.md
+!frontend/README.md
+*.zip
+*.tar.gz
+*.log

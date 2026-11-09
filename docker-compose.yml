@@ -1,0 +1,31 @@
+# FlatNas 通用 Docker Compose
+# 用法：cp .env.example .env && 改 FLATNAS_IMAGE 后 docker compose up -d
+services:
+  flatnas:
+    image: ${FLATNAS_IMAGE:-ghcr.io/your-name/flatnas:latest}
+    container_name: flatnas
+    restart: unless-stopped
+    ports:
+      - "${FLATNAS_PORT:-23000}:3000"
+    environment:
+      - TZ=${TZ:-Asia/Shanghai}
+      - PORT=3000
+      - HOST=0.0.0.0
+      # 反向代理挂子路径（如 https://nas.example.com/flatnas/）时启用：
+      # - BASE_PATH=/flatnas
+      # 需要后端代理外网请求（RSS/热榜/壁纸）时启用：
+      # - PROXY_URL=http://192.168.1.2:7890
+    volumes:
+      - ./data:/app/server/data          # 配置/用户/版本快照，必须持久化
+      - ./music:/app/server/music        # 音乐播放器
+      - ./PC:/app/server/PC              # 桌面壁纸库
+      - ./APP:/app/server/APP            # 移动端壁纸库
+      - ./doc:/app/server/doc            # 文件传输助手
+      # Docker 管理组件（设置里开启后生效）；不需要可整行删除
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/system-config >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s

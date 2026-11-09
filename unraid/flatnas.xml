@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>FlatNas</Name>
+  <Repository>ghcr.io/your-name/flatnas:latest</Repository>
+  <Registry>https://ghcr.io/your-name/flatnas</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/your-name/FlatNas/issues</Support>
+  <Project>https://github.com/your-name/FlatNas</Project>
+  <Overview>轻量级个人导航页与仪表盘（Vue 3 + Go/Gin，无数据库，纯文件存储）。内置书签/分组、拖拽组件网格、时钟天气、日历、备忘录、待办、RSS、热搜榜、音乐播放器、文件传输助手、Docker 管理、宿主机监控等 20+ 组件。默认密码 admin，首次登录后请在设置中修改。</Overview>
+  <Category>Tools: Productivity: Utilities</Category>
+  <WebUI>http://[IP]:[PORT:3000]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/your-name/FlatNas/main/unraid/flatnas.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/your-name/FlatNas/main/unraid/flatnas-icon.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled></DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Description>FlatNas 一体化镜像，前端静态资源与 Go 后端在同一容器内，默认监听 3000 端口。数据全部落在 /mnt/user/appdata/flatnas 下，备份该目录即可完整迁移。</Description>
+
+  <Config Name="Web 端口" Target="3000" Default="23000" Mode="tcp" Description="FlatNas Web 访问端口" Type="Port" Display="always" Required="true" Mask="false">23000</Config>
+
+  <Config Name="数据目录 (必填持久化)" Target="/app/server/data" Default="/mnt/user/appdata/flatnas/data" Mode="rw" Description="配置、用户、版本快照、图标缓存。丢失即等于重置全部设置" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/flatnas/data</Config>
+  <Config Name="音乐目录" Target="/app/server/music" Default="/mnt/user/appdata/flatnas/music" Mode="rw" Description="音乐播放器的音频文件目录，可改为 /mnt/user/Music" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/flatnas/music</Config>
+  <Config Name="桌面壁纸目录" Target="/app/server/PC" Default="/mnt/user/appdata/flatnas/PC" Mode="rw" Description="PC 端壁纸库" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/flatnas/PC</Config>
+  <Config Name="移动端壁纸目录" Target="/app/server/APP" Default="/mnt/user/appdata/flatnas/APP" Mode="rw" Description="移动端壁纸库" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/flatnas/APP</Config>
+  <Config Name="文件传输目录" Target="/app/server/doc" Default="/mnt/user/appdata/flatnas/doc" Mode="rw" Description="文件传输助手的落盘目录" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/flatnas/doc</Config>
+
+  <Config Name="时区" Target="TZ" Default="Asia/Shanghai" Mode="" Description="容器时区，影响时钟/日历/天气组件" Type="Variable" Display="always" Required="false" Mask="false">Asia/Shanghai</Config>
+  <Config Name="子路径 (可选)" Target="BASE_PATH" Default="" Mode="" Description="反向代理挂到 /flatnas/ 这类子路径时填写，例如 /flatnas；根路径部署留空" Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+  <Config Name="出站代理 (可选)" Target="PROXY_URL" Default="" Mode="" Description="形如 http://192.168.1.2:7890，用于 RSS/热榜/壁纸等外网请求走后端代理，支持 http/https/socks5" Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+
+  <Config Name="Docker Socket (Docker 管理组件)" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="挂载后才能使用内置 Docker 管理组件查看/启停容器；不需要可删除本项" Type="Path" Display="advanced" Required="false" Mask="false">/var/run/docker.sock</Config>
+</Container>
