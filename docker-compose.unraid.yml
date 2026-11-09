@@ -8,7 +8,7 @@
 # 或者直接用 Unraid 的“Compose Manager / Docker Compose”插件新建 Stack 粘贴本文件。
 services:
   flatnas:
-    image: ${FLATNAS_IMAGE:-ghcr.io/your-name/flatnas:latest}
+    image: ${FLATNAS_IMAGE:-ghcr.io/mjy378283319/flatnas:latest}
     container_name: flatnas
     restart: unless-stopped
     ports:

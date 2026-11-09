@@ -2,7 +2,7 @@
 # 用法：cp .env.example .env && 改 FLATNAS_IMAGE 后 docker compose up -d
 services:
   flatnas:
-    image: ${FLATNAS_IMAGE:-ghcr.io/your-name/flatnas:latest}
+    image: ${FLATNAS_IMAGE:-ghcr.io/mjy378283319/flatnas:latest}
     container_name: flatnas
     restart: unless-stopped
     ports:

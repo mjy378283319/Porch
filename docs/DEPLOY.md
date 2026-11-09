@@ -2,20 +2,22 @@
 
 面向本 Fork：从源码构建镜像 → 推到自己的 GitHub Container Registry → Unraid 直接拉取运行。
 
-> 全文中 `<owner>` 指你的 GitHub 用户名/组织名。本仓库已统一使用占位符 `your-name`，
+> 全文中 `<owner>` 指你的 GitHub 用户名/组织名。本仓库已统一使用占位符 `mjy378283319`，  
 > 拿到账号后执行一次 `./scripts/set-owner.sh <你的GitHub用户名>` 即可批量替换。
+
+
 
 ---
 
 ## 0. 前置条件
 
-| 项 | 要求 |
-| --- | --- |
-| Docker | 20.10+（buildx 支持） |
-| Unraid | 6.10+（Compose Manager 插件可选） |
-| 磁盘 | 镜像约 120 MB；数据目录按壁纸/音乐/传输文件实际占用 |
-| 端口 | 容器内 3000，宿主默认映射 23000 |
-| 架构 | linux/amd64（主流 Unraid）、linux/arm64（ARM NAS） |
+| 项      | 要求                                          |
+| ------ | ------------------------------------------- |
+| Docker | 20.10+（buildx 支持）                           |
+| Unraid | 6.10+（Compose Manager 插件可选）                 |
+| 磁盘     | 镜像约 120 MB；数据目录按壁纸/音乐/传输文件实际占用              |
+| 端口     | 容器内 3000，宿主默认映射 23000                       |
+| 架构     | linux/amd64（主流 Unraid）、linux/arm64（ARM NAS） |
 
 ---
 
@@ -28,7 +30,7 @@ cd FlatNas
 git commit -am "chore: set image owner to <owner>" && git push
 ```
 
-`set-owner.sh` 会把以下文件里的 `your-name` 换成你的账号：
+`set-owner.sh` 会把以下文件里的 `mjy378283319` 换成你的账号：
 
 - `docker-compose.yml`、`docker-compose.unraid.yml`、`.env.example`
 - `unraid/flatnas.xml`（Repository / Registry / Icon / TemplateURL / Support / Project）
@@ -79,14 +81,14 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 
 ### 2.3 用 GitHub Actions 自动构建（推荐）
 
-`.github/workflows/docker-publish.yml` 已配好，推 `main` 或打 tag 即自动构建
+`.github/workflows/docker-publish.yml` 已配好，推 `main` 或打 tag 即自动构建  
 `linux/amd64,linux/arm64` 并推到 `ghcr.io/<owner>/<repo>`，用内置 `GITHUB_TOKEN`，无需额外 Secrets。
 
 首次使用需确认两点：
 
-1. **Actions 权限**：仓库 `Settings → Actions → General → Workflow permissions` 选
+1. **Actions 权限**：仓库 `Settings → Actions → General → Workflow permissions` 选  
    `Read and write permissions`（否则 `packages: write` 会被拒）。
-2. **包可见性**：默认私有仓库产出的镜像也是私有。Unraid 拉取需登录（见 3.4）；
+2. **包可见性**：默认私有仓库产出的镜像也是私有。Unraid 拉取需登录（见 3.4）；  
    想公开则在 `Packages → flatnas → Package settings → Change visibility` 改为 Public。
 
 打 tag 会自动产生语义化版本标签：
@@ -113,15 +115,15 @@ Actions → Build & Publish Image (GHCR) → Run workflow → platforms: linux/a
    ```
    https://raw.githubusercontent.com/<owner>/FlatNas/main/unraid/flatnas.xml
    ```
-   私有仓库 raw 链接不可匿名访问时，改用方式二/三，或把该 XML 上传到
+   私有仓库 raw 链接不可匿名访问时，改用方式二/三，或把该 XML 上传到  
    `/boot/config/plugins/dockerMan/templates-user/my-FlatNas.xml` 后在模板下拉里选 “FlatNas”。
-3. 表单里已预置好：端口 `23000 → 3000`、5 个 appdata 路径、`TZ`，以及可选的 `BASE_PATH` / `PROXY_URL`
+3. 表单里已预置好：端口 `23000 → 3000`、5 个 appdata 路径、`TZ`，以及可选的 `BASE_PATH` / `PROXY_URL`  
    和 Docker Socket。确认路径后 `Apply`。
 4. 浏览器打开 `http://<Unraid-IP>:23000`，用 `admin`/`admin` 登录并改密码。
 
 ### 3.2 方式二：Compose Manager（Stack）
 
-Unraid 装 `Compose Manager` 插件 → `Compose` → `Add New Stack` → 名称 `flatnas` →
+Unraid 装 `Compose Manager` 插件 → `Compose` → `Add New Stack` → 名称 `flatnas` →  
 把 `docker-compose.unraid.yml` 内容整段粘进去 → `Compose Up`。
 
 目录规划（默认全部落在 appdata，Unraid 备份只认这一个目录）：
@@ -137,21 +139,21 @@ Unraid 装 `Compose Manager` 插件 → `Compose` → `Add New Stack` → 名称
 
 ### 3.3 方式三：Docker UI 手动添加
 
-| 字段 | 值 |
-| --- | --- |
-| Name | `flatnas` |
-| Repository | `ghcr.io/<owner>/flatnas:latest` |
-| Network Type | `bridge` |
-| Port | `23000` / 容器端口 `3000` / TCP |
-| Path 1 | `/mnt/user/appdata/flatnas/data` → `/app/server/data` (rw) |
-| Path 2 | `/mnt/user/appdata/flatnas/music` → `/app/server/music` (rw) |
-| Path 3 | `/mnt/user/appdata/flatnas/PC` → `/app/server/PC` (rw) |
-| Path 4 | `/mnt/user/appdata/flatnas/APP` → `/app/server/APP` (rw) |
-| Path 5 | `/mnt/user/appdata/flatnas/doc` → `/app/server/doc` (rw) |
-| Path 6（可选） | `/var/run/docker.sock` → `/var/run/docker.sock` (rw) |
-| Variable | `TZ` = `Asia/Shanghai` |
+| 字段           | 值                                                            |
+| ------------ | ------------------------------------------------------------ |
+| Name         | `flatnas`                                                    |
+| Repository   | `ghcr.io/<owner>/flatnas:latest`                             |
+| Network Type | `bridge`                                                     |
+| Port         | `23000` / 容器端口 `3000` / TCP                                  |
+| Path 1       | `/mnt/user/appdata/flatnas/data` → `/app/server/data` (rw)   |
+| Path 2       | `/mnt/user/appdata/flatnas/music` → `/app/server/music` (rw) |
+| Path 3       | `/mnt/user/appdata/flatnas/PC` → `/app/server/PC` (rw)       |
+| Path 4       | `/mnt/user/appdata/flatnas/APP` → `/app/server/APP` (rw)     |
+| Path 5       | `/mnt/user/appdata/flatnas/doc` → `/app/server/doc` (rw)     |
+| Path 6（可选）   | `/var/run/docker.sock` → `/var/run/docker.sock` (rw)         |
+| Variable     | `TZ` = `Asia/Shanghai`                                       |
 
-> 只有挂了 `docker.sock` 并且进设置里开启 “Docker 管理”，容器管理组件才可用。
+> 只有挂了 `docker.sock` 并且进设置里开启 “Docker 管理”，容器管理组件才可用。  
 > 该挂载等价于把宿主 Docker 控制权交给容器，属高危权限，不需要就别挂。
 
 ### 3.4 拉私有 GHCR 镜像
@@ -163,14 +165,14 @@ docker login ghcr.io -u <owner>
 # 密码粘贴 PAT（classic，勾 read:packages 即可）
 ```
 
-`docker pull ghcr.io/<owner>/flatnas:latest` 成功即说明凭据可用。换 token 或报
+`docker pull ghcr.io/<owner>/flatnas:latest` 成功即说明凭据可用。换 token 或报  
 `denied: denied` 时重新 login。
 
 ### 3.5 权限说明
 
-容器内进程以 root 运行（需要读宿主机 `/proc`、`/var/run/docker.sock` 做监控与容器管理），
-所以 appdata 目录属主为 `root:root` 属正常现象，不要改成 `nobody`，否则会写不进配置。
-若坚持最小权限，可去掉 Docker Socket 挂载并关掉 Docker 组件，再自行以非 root 运行
+容器内进程以 root 运行（需要读宿主机 `/proc`、`/var/run/docker.sock` 做监控与容器管理），  
+所以 appdata 目录属主为 `root:root` 属正常现象，不要改成 `nobody`，否则会写不进配置。  
+若坚持最小权限，可去掉 Docker Socket 挂载并关掉 Docker 组件，再自行以非 root 运行  
 （需同时改 Dockerfile 的 `USER` 与目录属主，属未验证路径）。
 
 ---
@@ -242,8 +244,8 @@ tar -czf flatnas-data-$(date +%F).tar.gz -C /mnt/user/appdata/flatnas data
 docker start flatnas
 ```
 
-`data/` 里最关键的是 `data.json`（全部布局/书签/组件配置）、`system.json`（认证模式）、
-`users/`（多用户）、`secret.key`（JWT 签名密钥，换掉会导致所有登录态失效）。
+`data/` 里最关键的是 `data.json`（全部布局/书签/组件配置）、`system.json`（认证模式）、  
+`users/`（多用户）、`secret.key`（JWT 签名密钥，换掉会导致所有登录态失效）。  
 应用内 `设置 → 配置版本` 还能存快照并一键回滚，适合改坏了局部恢复。
 
 ### 升级
@@ -278,19 +280,19 @@ docker stats --no-stream flatnas                  # 资源占用
 
 ## 7. 故障排查
 
-| 现象 | 原因 | 处理 |
-| --- | --- | --- |
-| 页面白屏 / 只有背景 | `BASE_PATH` 与反代路径不一致；或浏览器缓存了旧 chunk | 两处路径对齐；强刷（Ctrl+Shift+R），后端已对 `index.html` 发 `no-store` |
-| `401 Unauthorized` 频繁 | token 过期或 `secret.key` 被换 | 重新登录；确认 `data/secret.key` 未被删除 |
-| 多端不同步 / 保存后别的端不更新 | 反代没透传 `Upgrade`，WebSocket 被降级 | 按 4.1 补 `Upgrade`/`Connection` 头 |
-| `permission denied /var/run/docker.sock` | 未挂 Socket 或宿主 docker 组权限 | 挂 `docker.sock`；Docker 组件需 root（本镜像默认 root） |
-| 图标大量 404 | 反代把 `/icons/` 拦了，或构建时素材没打进去 | 直接访问 `/icons/favicon.ico` 验证；重新 `docker build` |
-| 上传大文件失败 / 413 | 反代 `client_max_body_size` 太小 | 设为 `0` 或足够大 |
-| RSS / 热榜 / 壁纸加载失败 | NAS 无法直连外网 | 设 `PROXY_URL=http://<代理>:<端口>`，支持 http/https/socks5 |
-| 天气组件空白 | 未配 Key（高德/和风）或源不可达 | 设置 → 天气，切 `wttr`（免 Key）或填高德 Key |
-| 容器一直 `unhealthy` | 端口/`PORT` 被改但健康检查未同步 | 健康检查读 `${PORT}`，改端口需同时改 env |
-| GHCR 拉取 `denied` | 未登录或 PAT 无 `read:packages` | `docker login ghcr.io`；确认包可见性与 PAT scope |
-| Actions 构建失败 `permission denied for packages` | 工作流权限不足 | 仓库 `Settings → Actions → General → Read and write permissions` |
+| 现象                                            | 原因                                  | 处理                                                             |
+| --------------------------------------------- | ----------------------------------- | -------------------------------------------------------------- |
+| 页面白屏 / 只有背景                                   | `BASE_PATH` 与反代路径不一致；或浏览器缓存了旧 chunk | 两处路径对齐；强刷（Ctrl+Shift+R），后端已对 `index.html` 发 `no-store`         |
+| `401 Unauthorized` 频繁                         | token 过期或 `secret.key` 被换           | 重新登录；确认 `data/secret.key` 未被删除                                 |
+| 多端不同步 / 保存后别的端不更新                             | 反代没透传 `Upgrade`，WebSocket 被降级       | 按 4.1 补 `Upgrade`/`Connection` 头                               |
+| `permission denied /var/run/docker.sock`      | 未挂 Socket 或宿主 docker 组权限            | 挂 `docker.sock`；Docker 组件需 root（本镜像默认 root）                    |
+| 图标大量 404                                      | 反代把 `/icons/` 拦了，或构建时素材没打进去         | 直接访问 `/icons/favicon.ico` 验证；重新 `docker build`                 |
+| 上传大文件失败 / 413                                 | 反代 `client_max_body_size` 太小        | 设为 `0` 或足够大                                                    |
+| RSS / 热榜 / 壁纸加载失败                             | NAS 无法直连外网                          | 设 `PROXY_URL=http://<代理>:<端口>`，支持 http/https/socks5            |
+| 天气组件空白                                        | 未配 Key（高德/和风）或源不可达                  | 设置 → 天气，切 `wttr`（免 Key）或填高德 Key                                |
+| 容器一直 `unhealthy`                              | 端口/`PORT` 被改但健康检查未同步                | 健康检查读 `${PORT}`，改端口需同时改 env                                    |
+| GHCR 拉取 `denied`                              | 未登录或 PAT 无 `read:packages`          | `docker login ghcr.io`；确认包可见性与 PAT scope                       |
+| Actions 构建失败 `permission denied for packages` | 工作流权限不足                             | 仓库 `Settings → Actions → General → Read and write permissions` |
 
 ---
 
