@@ -4,6 +4,16 @@ import { useStorage } from "@vueuse/core";
 import type { AppConfig, SystemConfig } from "@/types";
 import { resolveManagedUrl } from "@/utils/runtimeUrls";
 
+/**
+ * 版本检查地址。上游默认查作者自己的 Gitee 仓库，fork 后必须换成自己的，
+ * 否则设置页会显示上游的版本号。
+ *
+ * 仓库为私有时，浏览器匿名请求这个 API 会拿到 401/404，此时 latestVersion
+ * 保持为空、不显示"有新版本"，属于预期降级；镜像层面的更新提示不受影响，
+ * 那条走 /api/docker-status 比对镜像 digest。
+ */
+const UPDATE_CHECK_TAGS_URL = "https://api.github.com/repos/mjy378283319/FlatNas/tags";
+
 export const useConfigStore = defineStore("config", () => {
   // Pure client-only states (NOT synced to server)
   const forceNetworkMode = useStorage<"auto" | "lan" | "wan" | "latency">(
@@ -183,7 +193,7 @@ export const useConfigStore = defineStore("config", () => {
 
       if (shouldCheckRemote) {
         updateCheckLastAt.value = now;
-        const res = await fetch("https://gitee.com/api/v5/repos/gjx0808/FlatNas/tags");
+        const res = await fetch(UPDATE_CHECK_TAGS_URL);
         if (res.ok) {
           const data = await res.json();
           if (data.length > 0) {

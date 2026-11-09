@@ -152,6 +152,23 @@ func (b *WSBroadcaster) BroadcastBookmarks(username string, widgetID string, con
 	BroadcastBookmarksUpdated(b.Manager, username, widgetID, content)
 }
 
+func (b *WSBroadcaster) BroadcastLuckyStun(snapshot interface{}) {
+	BroadcastLuckyStunUpdated(b.Manager, snapshot)
+}
+
+// BroadcastLuckyStunUpdated 把 Lucky STUN webhook 收到的最新状态推给所有已连接客户端。
+// 前端在 stores/sync.ts 里监听 "lucky:stun"，payload 结构与 LuckyStunData 对齐。
+func BroadcastLuckyStunUpdated(manager *WSManager, snapshot interface{}) {
+	if manager == nil {
+		return
+	}
+	replyMsg, _ := json.Marshal(map[string]interface{}{
+		"type":    "lucky:stun",
+		"payload": snapshot,
+	})
+	manager.Broadcast(replyMsg, "")
+}
+
 // BroadcastTodoUpdated REST API 保存 todo 后通过 WebSocket 广播
 func BroadcastTodoUpdated(manager *WSManager, username string, widgetID string, content interface{}) {
 	if manager == nil {

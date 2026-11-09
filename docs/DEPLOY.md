@@ -251,6 +251,35 @@ location /flatnas/ {
 
 系统按客户端 IP、访问域名、延迟三维判定，内网直接走 LanUrl，外网走公网地址。
 
+### 4.4 开放中心（Lucky STUN）联动
+
+设置 → 开放中心里会给出一个 Webhook 地址：
+
+```
+https://<你的域名>/api/webhook/lucky/stun
+```
+
+在 Lucky 的「STUN 穿透 → 全局 Webhook」里填这个地址，Header 用 `Content-Type: application/json`，
+Body 用：
+
+```json
+{ "stun": "success", "ip": "#{ip}", "port": "#{port}" }
+```
+
+Lucky 每次穿透状态变化都会 POST 一次，FlatNas 收到后通过 WebSocket 推给所有已登录页面，
+设置面板的「最新状态」会实时刷新；断线时点「刷新数据」也能拉到最近一次快照。
+
+两个注意点：
+
+- 该路径**不校验 JWT**（Lucky 不会带），如果实例暴露公网，建议在反代上按来源 IP 限制。
+- 快照存在内存里，容器重启后清空，下一次任意一条回调进来就会重新填充。
+
+### 4.5 版本检查地址
+
+`frontend/src/stores/config.ts` 顶部的 `UPDATE_CHECK_TAGS_URL` 决定设置页显示哪个仓库的版本号。
+Fork 后已默认指向本仓库；如果仓库保持私有，浏览器匿名请求 GitHub API 会 401，此时只是不显示版本号，
+不影响使用。想让它工作就把仓库转公开，或改成你自己的公开仓库地址。
+
 ---
 
 ## 5. 备份、升级与回滚

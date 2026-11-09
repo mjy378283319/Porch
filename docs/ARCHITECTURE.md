@@ -74,7 +74,8 @@ FlatNas/
 │   │   ├── config.go               路径解析（BASE_DIR/server/*）、首启初始化、JWT 密钥生成
 │   │   └── default.json            默认仪表盘模板（go:embed 进二进制）
 │   ├── handlers/                   auth / data / docker / system / weather / rss / hot /
-│   │                               music / memo / transfer / wallpaper / icons / proxy / versions
+│   │                               music / memo / transfer / wallpaper / icons / proxy / versions /
+│   │                               meta（书签抓标题/图标）、lucky_webhook（STUN 状态回调）
 │   ├── middleware/                 认证、限流、恢复、gzip 解压
 │   ├── models/models.go            数据结构定义
 │   ├── utils/                      crypto（bcrypt/JWT）、通用工具
@@ -196,14 +197,18 @@ FlatNas/
 | GET/POST | `/docker/containers` `/docker/container/:id/:action`* | 容器列表、启停/重启/升级 |
 | GET | `/system/stats`* | 宿主机 CPU/内存/磁盘/网络 |
 | GET/POST | `/transfer/*`* | 文件传输：分片初始化/上传/合并/断点续传状态 |
-| POST/GET | `/backgrounds/*` `/music/*` | 壁纸、音乐的上传与删除 |
+| GET/POST | `/backgrounds/*` `/music/*` | 壁纸、音乐的上传与删除 |
 | GET/POST | `/config-versions*` | 配置快照列表 / 保存 / 恢复 / 删除 |
+| GET | `/fetch-meta?url=` | 抓取目标网页的 `<title>` 与 favicon（添加书签时自动填充） |
+| POST | `/webhook/lucky/stun` | 接收 Lucky STUN 穿透状态回调（**匿名**，Lucky 不带 JWT），广播 `lucky:stun` |
+| GET | `/webhook/lucky/stun` | 最近一次 STUN 快照，供设置面板「刷新数据」拉取 |
 | ANY | `/proxy?url=` | 出站代理，带 SSRF 校验 |
 
 ### 实时
 
 - **Socket.IO**（`/socket.io`）：`hot` `weather` `rss` `memo` `todo` `network` 事件；连接时用 `?token=` 鉴权
-- **原生 WebSocket**（`/ws`）：配置变更广播、在线状态、其它端保存后的推送
+- **原生 WebSocket**（`/ws`）：配置变更广播、在线状态、其它端保存后的推送、`lucky:stun`（STUN 穿透状态）
+- WebSocket 连接先建立，再发 `{"type":"auth","payload":{"token":"<JWT>"}}` 完成鉴权；广播只发给已鉴权连接
 
 ### 保存与冲突
 

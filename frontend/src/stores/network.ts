@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { useAuthStore } from "./auth";
 import { useConfigStore } from "./config";
 import { toApiUrl } from "@/utils/runtimeUrls";
+import type { LuckyStunData } from "@/types";
 import { useStorage } from "@vueuse/core";
 
 export const useNetworkStore = defineStore("network", () => {
@@ -371,8 +372,19 @@ export const useNetworkStore = defineStore("network", () => {
 
   const fetchLuckyStunData = async () => {
     if (import.meta.env.MODE === "test") return;
-    // The backend currently exposes STUN data only via WS push.
-    // Avoid probing a non-existent REST endpoint and spamming 404s.
+    // 常态走 WS 推送（事件 lucky:stun）；这里拉一次内存快照，
+    // 让设置面板的「刷新数据」按钮在 WS 尚未连上时也有结果。
+    try {
+      const res = await fetch(toApiUrl("/api/webhook/lucky/stun"), { headers: getHeaders() });
+      if (!res.ok) return;
+      const data = (await res.json()) as LuckyStunData;
+      if (!data || !data.data) return;
+      // 动态引入：sync store 已经 import 了本 store，静态引入会形成循环依赖
+      const { useSyncStore } = await import("./sync");
+      useSyncStore().luckyStunData = data;
+    } catch (e) {
+      console.error("Failed to fetch lucky stun data", e);
+    }
   };
 
   const initEventBindings = (wsOpen: () => void, wsClose: () => void, getStatusValue: () => string, triggerOfflineQueueReplay: () => void) => {
