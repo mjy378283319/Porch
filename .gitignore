@@ -49,3 +49,9 @@ Desktop.ini
 # API 推送脚本的临时文件
 _msg.txt
 api_push.log
+
+# 开发工具产物（mock 截图 / 扫描缓存）
+shots-*/
+tools/_bindings.json
+tools/_panel_scan.json
+tools/mock.log

@@ -33,6 +33,7 @@ server/public/*
 # 文档与素材（不参与构建）
 docs
 unraid
+tools
 public
 *.md
 !frontend/README.md

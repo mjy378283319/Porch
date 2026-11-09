@@ -313,8 +313,13 @@ def main() -> int:
         parent = commit.get("sha")
 
     # 3) 移动分支引用
-    api(token, "PATCH", f"/repos/{repo}/git/refs/heads/{branch}",
-        {"sha": parent, "force": True})
+    try:
+        api(token, "PATCH", f"/repos/{repo}/git/refs/heads/{branch}",
+            {"sha": parent, "force": True})
+    except ApiError:
+        # 新分支：引用还不存在，直接创建
+        api(token, "POST", f"/repos/{repo}/git/refs",
+            {"ref": f"refs/heads/{branch}", "sha": parent})
     log(f"已更新 refs/heads/{branch} → {parent[:7] if parent else '?'}")
 
     # 4) 回读校验
