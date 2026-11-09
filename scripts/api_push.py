@@ -197,6 +197,39 @@ def tree_entries(root: Path, commit: str) -> list[dict]:
     return entries
 
 
+
+def diff_entries(root: Path, parent: str, commit: str) -> list[dict]:
+    """相对父提交的变更条目（新增/修改/删除），用于配合 base_tree 增量建树。
+
+    整棵树一次性提交（1000+ 条目）时 GitHub 会 422 超时，改成「base_tree + 差异」后
+    载荷通常只有几条，且因为 git tree 由内容决定，算出来的 sha 仍与本地一致。
+    """
+    raw = git(root, "diff-tree", "-r", "-z", "--no-commit-id", parent, commit, binary=True)
+    entries: dict[str, dict] = {}
+    tokens = raw.split(b"\0")
+    i = 0
+    while i < len(tokens):
+        meta = tokens[i]
+        if not meta:
+            i += 1
+            continue
+        parts = meta.decode("utf-8", "replace").lstrip(":").split()
+        # 格式: :old_mode new_mode old_sha new_sha status
+        if len(parts) >= 5:
+            new_mode, new_sha, status = parts[1], parts[3], parts[4]
+            path = tokens[i + 1].decode("utf-8", "replace") if i + 1 < len(tokens) else ""
+            i += 2
+            if not path:
+                continue
+            if status.startswith("D"):
+                entries[path] = {"path": path, "mode": "100644", "type": "blob", "sha": None}
+            else:
+                entries[path] = {"path": path, "mode": new_mode, "type": "blob", "sha": new_sha}
+        else:
+            i += 1
+    return list(entries.values())
+
+
 def upload_blobs(repo: str, token: str, root: Path, blobs: dict[str, str], jobs: int) -> None:
     """blobs: blob-sha -> 本地内容来源路径（用 cat-file 读，避免工作区改动影响）。"""
     global _done, _total, _started
@@ -260,6 +293,11 @@ def main() -> int:
 
     # 远端若已有提交，只推远端缺失的部分
     remote_head = (api(token, "GET", f"/repos/{repo}/git/ref/heads/{branch}") or {}).get("object", {}).get("sha")
+    if not remote_head:
+        # 新分支：借主干的 head 作为 blob 基线，避免把仓库里已有的文件重传一遍
+        remote_head = (api(token, "GET", f"/repos/{repo}/git/ref/heads/main") or {}).get("object", {}).get("sha")
+        if remote_head:
+            log("目标分支不存在，用 main 的 head 作为已存在 blob 的基线")
     start = 0
     if remote_head and remote_head in commits:
         start = commits.index(remote_head) + 1
@@ -293,10 +331,18 @@ def main() -> int:
     # 远端 head 在本地历史里时，从它接着推；不在（例如远端只有一个初始化提交）就从根开始，
     # 让远端历史与本地逐字节一致，而不是把本地链挂到一个无关的远端提交上。
     parent = remote_head if start > 0 else None
+    parent_tree: str | None = None
+    if parent:
+        parent_tree = (api(token, "GET", f"/repos/{repo}/git/commits/{parent}") or {}).get("tree", {}).get("sha")
     for sha in pending:
         meta = parse_commit(root, sha)
-        entries = tree_entries(root, sha)
-        tree = api(token, "POST", f"/repos/{repo}/git/trees", {"tree": entries})
+        if meta["parents"] and parent_tree:
+            entries = diff_entries(root, meta["parents"][0], sha)
+            tree = api(token, "POST", f"/repos/{repo}/git/trees",
+                       {"tree": entries, "base_tree": parent_tree})
+        else:
+            entries = tree_entries(root, sha)
+            tree = api(token, "POST", f"/repos/{repo}/git/trees", {"tree": entries})
         tree_sha = tree.get("sha", "")
         flag = "ok" if tree_sha == meta["tree"] else "MISMATCH"
         log(f"tree {sha[:7]}: {tree_sha[:7]} vs 本地 {meta['tree'][:7]} [{flag}]")
@@ -311,6 +357,7 @@ def main() -> int:
         commit = api(token, "POST", f"/repos/{repo}/git/commits", body)
         log(f"commit {sha[:7]} → {commit.get('sha', '')[:7]}  {meta['message'].splitlines()[0][:60]}")
         parent = commit.get("sha")
+        parent_tree = tree_sha
 
     # 3) 移动分支引用
     try:
