@@ -2,7 +2,7 @@
 
 面向本 Fork：从源码构建镜像 → 推到自己的 GitHub Container Registry → Unraid 直接拉取运行。
 
-> 全文中 `<owner>` 指你的 GitHub 用户名/组织名。本仓库已统一使用占位符 `mjy378283319`，  
+> 全文中 `mjy378283319` 指你的 GitHub 用户名/组织名。本仓库已统一使用占位符 `mjy378283319`，  
 > 拿到账号后执行一次 `./scripts/set-owner.sh <你的GitHub用户名>` 即可批量替换。
 
 
@@ -24,10 +24,10 @@
 ## 1. 仓库准备
 
 ```bash
-git clone https://github.com/<owner>/FlatNas.git
+git clone https://github.com/mjy378283319/FlatNas.git
 cd FlatNas
-./scripts/set-owner.sh <owner>
-git commit -am "chore: set image owner to <owner>" && git push
+./scripts/set-owner.sh mjy378283319
+git commit -am "chore: set image owner to mjy378283319" && git push
 ```
 
 `set-owner.sh` 会把以下文件里的 `mjy378283319` 换成你的账号：
@@ -45,7 +45,7 @@ git commit -am "chore: set image owner to <owner>" && git push
 docker build -t flatnas:1.2.6 --build-arg VERSION=1.2.6 .
 
 # 或走 Makefile
-make build            # 产出 ghcr.io/<owner>/flatnas:1.2.6 与 :latest
+make build            # 产出 ghcr.io/mjy378283319/flatnas:1.2.6 与 :latest
 ```
 
 国内网络慢可加构建参数（构建期有效，不影响运行期）：
@@ -61,7 +61,7 @@ docker build \
 
 ```bash
 # 1) 建 PAT：GitHub → Settings → Developer settings → Tokens(classic)，勾 write:packages + read:packages
-echo <PAT> | docker login ghcr.io -u <owner> --password-stdin
+echo <PAT> | docker login ghcr.io -u mjy378283319 --password-stdin
 
 # 2) 创建 buildx 构建器（只需一次）
 docker buildx create --name flatnas-builder --use
@@ -70,11 +70,11 @@ docker buildx inspect --bootstrap
 # 3) 多架构构建并推送
 docker buildx build --platform linux/amd64,linux/arm64 \
   --build-arg VERSION=1.2.6 \
-  -t ghcr.io/<owner>/flatnas:1.2.6 \
-  -t ghcr.io/<owner>/flatnas:latest \
+  -t ghcr.io/mjy378283319/flatnas:1.2.6 \
+  -t ghcr.io/mjy378283319/flatnas:latest \
   --push .
 
-# 或 make multiarch OWNER=<owner>
+# 或 make multiarch OWNER=mjy378283319
 ```
 
 推完在 GitHub → 你的头像 → `Your packages` 里能看到 `flatnas`。
@@ -82,7 +82,7 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 ### 2.3 用 GitHub Actions 自动构建（推荐）
 
 `.github/workflows/docker-publish.yml` 已配好，推 `main` 或打 tag 即自动构建  
-`linux/amd64,linux/arm64` 并推到 `ghcr.io/<owner>/<repo>`，用内置 `GITHUB_TOKEN`，无需额外 Secrets。
+`linux/amd64,linux/arm64` 并推到 `ghcr.io/mjy378283319/<repo>`，用内置 `GITHUB_TOKEN`，无需额外 Secrets。
 
 首次使用需确认两点：
 
@@ -95,7 +95,7 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 
 ```bash
 git tag v1.2.6 && git push origin v1.2.6
-# → ghcr.io/<owner>/flatnas:1.2.6 / :1.2 / :latest
+# → ghcr.io/mjy378283319/flatnas:1.2.6 / :1.2 / :latest
 ```
 
 手动触发（可选自定义平台，例如给老 ARM NAS 加 `linux/arm/v7`）：
@@ -110,10 +110,10 @@ Actions → Build & Publish Image (GHCR) → Run workflow → platforms: linux/a
 
 ### 3.1 方式一：Unraid 模板（图形化，最省事）
 
-1. 先确认 `unraid/flatnas.xml` 里的 `Repository` 是 `ghcr.io/<owner>/flatnas:latest`（跑过 `set-owner.sh` 即已正确）。
+1. 先确认 `unraid/flatnas.xml` 里的 `Repository` 是 `ghcr.io/mjy378283319/flatnas:latest`（跑过 `set-owner.sh` 即已正确）。
 2. Unraid → `Docker` → `Add Container`，右上角 `Template` 输入框粘贴：
    ```
-   https://raw.githubusercontent.com/<owner>/FlatNas/main/unraid/flatnas.xml
+   https://raw.githubusercontent.com/mjy378283319/FlatNas/main/unraid/flatnas.xml
    ```
    私有仓库 raw 链接不可匿名访问时，改用方式二/三，或把该 XML 上传到  
    `/boot/config/plugins/dockerMan/templates-user/my-FlatNas.xml` 后在模板下拉里选 “FlatNas”。
@@ -142,7 +142,7 @@ Unraid 装 `Compose Manager` 插件 → `Compose` → `Add New Stack` → 名称
 | 字段           | 值                                                            |
 | ------------ | ------------------------------------------------------------ |
 | Name         | `flatnas`                                                    |
-| Repository   | `ghcr.io/<owner>/flatnas:latest`                             |
+| Repository   | `ghcr.io/mjy378283319/flatnas:latest`                             |
 | Network Type | `bridge`                                                     |
 | Port         | `23000` / 容器端口 `3000` / TCP                                  |
 | Path 1       | `/mnt/user/appdata/flatnas/data` → `/app/server/data` (rw)   |
@@ -161,11 +161,11 @@ Unraid 装 `Compose Manager` 插件 → `Compose` → `Add New Stack` → 名称
 Unraid 终端执行一次（凭据写入 `/root/.docker/config.json`，重启保留在 flash 上需自行备份）：
 
 ```bash
-docker login ghcr.io -u <owner>
+docker login ghcr.io -u mjy378283319
 # 密码粘贴 PAT（classic，勾 read:packages 即可）
 ```
 
-`docker pull ghcr.io/<owner>/flatnas:latest` 成功即说明凭据可用。换 token 或报  
+`docker pull ghcr.io/mjy378283319/flatnas:latest` 成功即说明凭据可用。换 token 或报  
 `denied: denied` 时重新 login。
 
 ### 3.5 权限说明
@@ -251,7 +251,7 @@ docker start flatnas
 ### 升级
 
 ```bash
-docker pull ghcr.io/<owner>/flatnas:latest
+docker pull ghcr.io/mjy378283319/flatnas:latest
 docker compose -f docker-compose.unraid.yml up -d      # 或 Unraid UI 里 Force Update
 ```
 
@@ -260,7 +260,7 @@ docker compose -f docker-compose.unraid.yml up -d      # 或 Unraid UI 里 Force
 ### 回滚
 
 ```bash
-docker pull ghcr.io/<owner>/flatnas:1.2.6     # 拉回旧 tag
+docker pull ghcr.io/mjy378283319/flatnas:1.2.6     # 拉回旧 tag
 docker compose up -d                          # compose 里把 tag 改成 1.2.6
 ```
 

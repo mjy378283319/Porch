@@ -15,7 +15,7 @@
 | --- | --- | --- |
 | 分发方式 | Docker Hub 预构建 + Debian 脚本 + Release 二进制 | 只走 Docker / GHCR 自建镜像（源码可复现） |
 | 仓库体积 | 含打包产物、示例媒体、构建产物（约 235 MB） | 只留可构建源码 + 图标库（约 45 MB） |
-| 镜像构建 | 推 Docker Hub | GitHub Actions → `ghcr.io/<owner>/flatnas`，amd64/arm64 |
+| 镜像构建 | 推 Docker Hub | GitHub Actions → `ghcr.io/mjy378283319/flatnas`，amd64/arm64 |
 | 编排文件 | 单一 compose | 通用 compose + Unraid 专用 compose + CA 模板 |
 | 镜像细节 | 无健康检查 | `HEALTHCHECK`、OCI labels、显式 `PORT/HOST/BASE_DIR` |
 
@@ -49,7 +49,7 @@
 ### Docker Compose
 
 ```bash
-git clone https://github.com/<owner>/FlatNas.git
+git clone https://github.com/mjy378283319/FlatNas.git
 cd FlatNas
 cp .env.example .env      # 把 FLATNAS_IMAGE 改成你的镜像地址
 docker compose up -d
@@ -66,7 +66,7 @@ docker run -d --name flatnas -p 23000:3000 \
   -v $PWD/PC:/app/server/PC \
   -v $PWD/APP:/app/server/APP \
   -v $PWD/doc:/app/server/doc \
-  ghcr.io/<owner>/flatnas:latest
+  ghcr.io/mjy378283319/flatnas:latest
 ```
 
 ### Unraid
@@ -75,7 +75,7 @@ docker run -d --name flatnas -p 23000:3000 \
 
 1. **模板**：`Docker` → `Add Container` → 模板 URL 填 `.../unraid/flatnas.xml`
 2. **Compose Manager**：新建 Stack，粘贴 `docker-compose.unraid.yml`
-3. **手动**：镜像 `ghcr.io/<owner>/flatnas:latest`，端口 `23000:3000`，挂 5 个 appdata 目录
+3. **手动**：镜像 `ghcr.io/mjy378283319/flatnas:latest`，端口 `23000:3000`，挂 5 个 appdata 目录
 
 > GHCR 私有镜像先登录：`docker login ghcr.io -u <用户名>`，密码用 PAT（勾 `read:packages`）。
 
