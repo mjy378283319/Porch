@@ -23,7 +23,7 @@
       "fileMatch": [
         "package.json"
       ],
-      "url": "file:///c%3A/DEV/FlatNas/FlatNas(Go)/.vscode/schemas/package.schema.json"
+      "url": "file:///c%3A/DEV/Porch/FlatNas(Go)/.vscode/schemas/package.schema.json"
     }
   ],
   "json.schemaDownload.enable": false

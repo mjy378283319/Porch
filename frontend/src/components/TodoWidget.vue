@@ -139,9 +139,9 @@ const persistSave = useDebounceFn(async () => {
 }, 500);
 
 // 本地持久化备份：防止网络断开时数据丢失
-const localBackup = useStorage<TodoItem[]>(`flatnas-todo-backup-${props.widget.id}`, []);
+const localBackup = useStorage<TodoItem[]>(`porch-todo-backup-${props.widget.id}`, []);
 // 记录最后一次清空操作的时间戳，用于区分"主动清空"和"数据丢失"
-const lastClearedAt = useStorage<number>(`flatnas-todo-last-cleared-${props.widget.id}`, 0);
+const lastClearedAt = useStorage<number>(`porch-todo-last-cleared-${props.widget.id}`, 0);
 
 watch(
   () => props.widget.data,

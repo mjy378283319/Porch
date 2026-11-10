@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1
 # ---------------------------------------------------------------------------
-# FlatNas 一体化镜像：前端(Vue3/Vite) + 后端(Go/Gin) 打进单个镜像
+# Porch 一体化镜像：前端(Vue3/Vite) + 后端(Go/Gin) 打进单个镜像
 #
 # 本地构建：
-#   docker build -t flatnas:local .
+#   docker build -t porch:local .
 # 多架构构建并推送：
 #   docker buildx build --platform linux/amd64,linux/arm64 \
-#     -t ghcr.io/<owner>/flatnas:latest --push .
+#     -t ghcr.io/<owner>/porch:latest --push .
 # ---------------------------------------------------------------------------
 
 # ---------- Stage 1: 构建前端 ----------
@@ -56,7 +56,7 @@ COPY backend/ ./
 ARG TARGETOS
 ARG TARGETARCH
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
-    go build -trimpath -ldflags="-s -w" -o flatnas-backend .
+    go build -trimpath -ldflags="-s -w" -o porch-backend .
 
 
 # ---------- Stage 3: 运行时 ----------
@@ -65,7 +65,7 @@ FROM alpine:latest
 ARG VERSION=1.2.6
 ARG REVISION=unknown
 
-LABEL org.opencontainers.image.title="FlatNas" \
+LABEL org.opencontainers.image.title="Porch" \
       org.opencontainers.image.description="轻量级个人导航页与仪表盘（Vue3 + Go/Gin，无数据库，纯文件存储）" \
       org.opencontainers.image.version="${VERSION}" \
       org.opencontainers.image.revision="${REVISION}" \
@@ -81,7 +81,7 @@ ENV TZ=Asia/Shanghai \
     HOST=0.0.0.0 \
     PORT=3000
 
-COPY --from=backend-builder /app/backend/flatnas-backend ./
+COPY --from=backend-builder /app/backend/porch-backend ./
 COPY --from=frontend-builder /app/frontend/dist ./server/public
 
 # 运行期数据目录（建议逐个挂载持久化）
@@ -93,4 +93,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD wget -qO- "http://127.0.0.1:${PORT:-3000}/api/system-config" >/dev/null 2>&1 || exit 1
 
-CMD ["./flatnas-backend"]
+CMD ["./porch-backend"]

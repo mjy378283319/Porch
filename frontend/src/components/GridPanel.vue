@@ -139,7 +139,7 @@ const showRainEffect = computed(() => weatherEffectEnabled.value && isRainWeathe
 
 const getWeatherCity = () => {
   try {
-    const cached = localStorage.getItem("flatnas_auto_city");
+    const cached = localStorage.getItem("porch_auto_city");
     if (cached) {
       const data = JSON.parse(cached);
       if (data?.city) return data.city;
@@ -2652,7 +2652,7 @@ const formattedLocation = computed(() => {
 });
 
 const fetchIp = async (force = false) => {
-  const CACHE_KEY = `flatnas_ip_cache:${networkScope}`;
+  const CACHE_KEY = `porch_ip_cache:${networkScope}`;
   const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in ms
   const initialIsLanMode = isLanMode.value;
   store.ipFetchStatus = "loading";
@@ -2773,7 +2773,7 @@ const fetchIp = async (force = false) => {
 const updateCache = () => {
   if (ipInfo.value.baiduLatency !== "...") {
     localStorage.setItem(
-      `flatnas_ip_cache:${networkScope}`,
+      `porch_ip_cache:${networkScope}`,
       JSON.stringify({
         timestamp: Date.now(),
         data: ipInfo.value,
@@ -3021,7 +3021,7 @@ onUnmounted(() => {
     >
       <div class="mx-auto transition-all duration-300" :style="{ maxWidth: mainContentMaxWidth }">
         <div
-          class="flex flex-col xl:flex-row xl:justify-between items-center gap-6 relative flatnas-header-container"
+          class="flex flex-col xl:flex-row xl:justify-between items-center gap-6 relative porch-header-container"
           :class="isWebPaginationMode ? 'mb-4' : 'mb-4'"
         >
           <div
@@ -3131,13 +3131,13 @@ onUnmounted(() => {
             :class="isWideLayout ? 'xl:w-[32rem]' : 'xl:w-64'"
           >
             <form
-              class="mx-auto shadow-lg hover:shadow-xl transition-shadow rounded-full bg-white/90 backdrop-blur-md border border-white/40 flex items-center p-1 flatnas-search-form"
+              class="mx-auto shadow-lg hover:shadow-xl transition-shadow rounded-full bg-white/90 backdrop-blur-md border border-white/40 flex items-center p-1 porch-search-form"
               :style="{
                 width: '100%',
                 height: '41px',
                 backgroundColor: `rgba(255, 255, 255, ${searchBgAlpha})`,
-                '--flatnas-search-text-color': searchTextColor,
-                '--flatnas-search-placeholder-color': searchPlaceholderColor,
+                '--porch-search-text-color': searchTextColor,
+                '--porch-search-placeholder-color': searchPlaceholderColor,
               }"
               @submit.prevent="doSearch"
               action="."
@@ -3154,7 +3154,7 @@ onUnmounted(() => {
                 aria-label="搜索框"
                 autocomplete="off"
                 autofocus
-                class="h-full pl-6 pr-4 rounded-full bg-transparent border-0 outline-none flatnas-search-input"
+                class="h-full pl-6 pr-4 rounded-full bg-transparent border-0 outline-none porch-search-input"
                 :style="{ width: 'calc(100% - 33.75%)' }"
                 :placeholder="
                   (engines.find((e) => e.key === effectiveEngine)?.label || '搜索') + ' 搜索...'
@@ -3164,7 +3164,7 @@ onUnmounted(() => {
                 <select
                   v-model="effectiveEngine"
                   aria-label="搜索引擎"
-                  class="h-[34px] px-3 py-0 bg-transparent rounded-full border border-gray-200 focus:border-blue-400 outline-none flatnas-search-select"
+                  class="h-[34px] px-3 py-0 bg-transparent rounded-full border border-gray-200 focus:border-blue-400 outline-none porch-search-select"
                   :style="{ width: 'calc(100%)', fontSize: '15px' }"
                   @click.stop
                 >
@@ -4379,12 +4379,12 @@ onUnmounted(() => {
 .shadow-text {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
-.flatnas-search-input,
-.flatnas-search-select {
-  color: var(--flatnas-search-text-color, #111827);
+.porch-search-input,
+.porch-search-select {
+  color: var(--porch-search-text-color, #111827);
 }
-.flatnas-search-input::placeholder {
-  color: var(--flatnas-search-placeholder-color, rgba(107, 114, 128, 1));
+.porch-search-input::placeholder {
+  color: var(--porch-search-placeholder-color, rgba(107, 114, 128, 1));
 }
 .card-item {
   border-color: var(--card-border-color);

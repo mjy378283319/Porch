@@ -51,7 +51,7 @@ const isSmallLayout = computed(
 );
 
 const activeTab = useStorage<"chat" | "files" | "photos">(
-  `flatnas-transfer-tab-${props.widget.id}`,
+  `porch-transfer-tab-${props.widget.id}`,
   "chat",
 );
 const loading = ref(false);

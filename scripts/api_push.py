@@ -76,7 +76,7 @@ def api(token: str, method: str, path: str, payload: dict | None = None,
             "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2022-11-28",
-            "User-Agent": "flatnas-api-push",
+            "User-Agent": "porch-api-push",
             "Content-Type": "application/json",
         })
         try:

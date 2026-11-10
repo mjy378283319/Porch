@@ -12,10 +12,10 @@ import json
 import re
 from pathlib import Path
 
-ROOT = Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/FlatNas/frontend/src/components")
+ROOT = Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/Porch/frontend/src/components")
 SRC = ROOT / "SettingsModal.vue"
 OUT = ROOT / "settings"
-SCAN = Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/FlatNas/tools/_panel_scan.json")
+SCAN = Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/Porch/tools/_panel_scan.json")
 
 PANELS = [
     ("style", "StylePanel", 2029, 2461),

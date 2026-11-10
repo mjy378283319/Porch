@@ -514,7 +514,7 @@ export const useSyncStore = defineStore("sync", () => {
   const initBroadcastChannel = () => {
     if (bcInited || typeof BroadcastChannel === "undefined") return;
     bcInited = true;
-    bc = new BroadcastChannel("flatnas-sync");
+    bc = new BroadcastChannel("porch-sync");
     bc.onmessage = (event) => {
       const msg = event.data;
       if (!msg?.type) return;

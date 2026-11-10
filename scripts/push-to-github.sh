@@ -2,14 +2,14 @@
 # 把本地仓库推到你的 GitHub 仓库
 #
 # 用法（Token 不要写进历史，用环境变量传）：
-#   GITHUB_TOKEN=ghp_xxx ./scripts/push-to-github.sh https://github.com/<owner>/FlatNas.git
+#   GITHUB_TOKEN=ghp_xxx ./scripts/push-to-github.sh https://github.com/<owner>/Porch.git
 #
 # 建议：先在 GitHub 网页上创建一个空仓库（不要勾 README/.gitignore），再执行本脚本。
 set -euo pipefail
 
 REMOTE_URL="${1:-}"
 if [ -z "$REMOTE_URL" ]; then
-  echo "用法: GITHUB_TOKEN=<pat> $0 https://github.com/<owner>/FlatNas.git" >&2
+  echo "用法: GITHUB_TOKEN=<pat> $0 https://github.com/<owner>/Porch.git" >&2
   exit 1
 fi
 

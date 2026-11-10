@@ -6,7 +6,7 @@ import json
 import re
 from pathlib import Path
 
-SRC = Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/FlatNas/frontend/src/components/SettingsModal.vue")
+SRC = Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/Porch/frontend/src/components/SettingsModal.vue")
 lines = SRC.read_text(encoding="utf-8").splitlines(keepends=True)
 
 SCRIPT_END = next(i for i, l in enumerate(lines) if l.startswith("</script>"))
@@ -25,7 +25,7 @@ PANELS = {
 }
 
 # ---- 父级绑定（用 @vue/compiler-sfc 导出的真实顶层绑定，避免把函数内局部变量当成绑定）----
-BINDINGS_JSON = Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/FlatNas/tools/_bindings.json")
+BINDINGS_JSON = Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/Porch/tools/_bindings.json")
 bindings: set[str] = set(json.loads(BINDINGS_JSON.read_text(encoding="utf-8")))
 
 KEYWORDS = set("""true false null undefined this new typeof instanceof in of return if else for while
@@ -64,7 +64,7 @@ for name, (start, end) in PANELS.items():
 
 union = sorted({n for v in ALL.values() for n in v} | {m for v in MODELS.values() for m in v})
 print("\nunion bindings:", len(union))
-Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/FlatNas/tools/_panel_scan.json").write_text(
+Path("C:/Users/MJY/WorkBuddy/2026-11-09-15-50-18/Porch/tools/_panel_scan.json").write_text(
     json.dumps({"panels": ALL, "models": MODELS, "union": union}, ensure_ascii=False, indent=1),
     encoding="utf-8",
 )

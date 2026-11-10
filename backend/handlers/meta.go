@@ -55,7 +55,7 @@ func FetchMeta(c *gin.Context) {
 		c.JSON(http.StatusOK, result)
 		return
 	}
-	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; FlatNas/1.0)")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; Porch/1.0)")
 	req.Header.Set("Accept", "text/html,application/xhtml+xml")
 
 	resp, err := metaClient.Do(req)

@@ -12,12 +12,12 @@ import { resolveManagedUrl } from "@/utils/runtimeUrls";
  * 保持为空、不显示"有新版本"，属于预期降级；镜像层面的更新提示不受影响，
  * 那条走 /api/docker-status 比对镜像 digest。
  */
-const UPDATE_CHECK_TAGS_URL = "https://api.github.com/repos/mjy378283319/FlatNas/tags";
+const UPDATE_CHECK_TAGS_URL = "https://api.github.com/repos/mjy378283319/Porch/tags";
 
 export const useConfigStore = defineStore("config", () => {
   // Pure client-only states (NOT synced to server)
   const forceNetworkMode = useStorage<"auto" | "lan" | "wan" | "latency">(
-    "flatnas-force-network-mode",
+    "porch-force-network-mode",
     "auto",
   );
   const isExpandedMode = ref(false);

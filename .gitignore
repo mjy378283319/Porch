@@ -5,9 +5,9 @@ frontend/dist/
 frontend/tmp/
 frontend/*.tsbuildinfo
 backend/build/
-backend/flatnas-backend
-backend/flatnas-server
-backend/flatnas-*
+backend/porch-backend
+backend/porch-server
+backend/porch-*
 *.exe
 
 # Windows 本地开发时 vite 把产物直接写进 server/public，不入库

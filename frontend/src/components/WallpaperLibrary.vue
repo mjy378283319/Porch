@@ -766,8 +766,8 @@ const applyCustomApi = async (type: "pc" | "mobile", apply: boolean = true) => {
         try {
           const key =
             type === "pc"
-              ? "flatnas_wallpaper_last_api_path_pc"
-              : "flatnas_wallpaper_last_api_path_mobile";
+              ? "porch_wallpaper_last_api_path_pc"
+              : "porch_wallpaper_last_api_path_mobile";
           localStorage.setItem(key, backgroundPath);
         } catch {
           // ignore

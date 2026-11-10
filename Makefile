@@ -2,7 +2,7 @@ SHELL := /bin/bash
 VERSION ?= 1.2.6
 REGISTRY ?= ghcr.io
 OWNER ?= your-name
-IMAGE := $(REGISTRY)/$(OWNER)/flatnas
+IMAGE := $(REGISTRY)/$(OWNER)/porch
 PLATFORMS ?= linux/amd64,linux/arm64
 REVISION := $(shell git rev-parse --short HEAD 2>/dev/null || echo dev)
 
@@ -20,7 +20,7 @@ build:
 		-t $(IMAGE):$(VERSION) -t $(IMAGE):latest .
 
 run:
-	docker run -d --name flatnas -p 23000:3000 \
+	docker run -d --name porch -p 23000:3000 \
 		-v $(PWD)/data:/app/server/data \
 		-v $(PWD)/music:/app/server/music \
 		-v $(PWD)/PC:/app/server/PC \

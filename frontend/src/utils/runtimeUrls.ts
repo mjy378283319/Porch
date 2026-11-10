@@ -7,7 +7,7 @@ type RuntimeConfig = {
 
 declare global {
   interface Window {
-    __FLATNAS_RUNTIME_CONFIG__?: RuntimeConfig;
+    __PORCH_RUNTIME_CONFIG__?: RuntimeConfig;
   }
 
   interface ImportMetaEnv {
@@ -103,7 +103,7 @@ const stripApiSuffix = (value: string) => {
 
 const getRuntimeConfig = (): RuntimeConfig => {
   if (typeof window === "undefined") return {};
-  return window.__FLATNAS_RUNTIME_CONFIG__ || {};
+  return window.__PORCH_RUNTIME_CONFIG__ || {};
 };
 
 const detectBasePathFromLocation = () => {

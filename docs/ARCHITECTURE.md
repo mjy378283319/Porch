@@ -1,4 +1,4 @@
-# FlatNas 架构说明
+# Porch 架构说明
 
 ## 1. 一句话架构
 
@@ -67,7 +67,7 @@
 ## 3. 目录结构
 
 ```
-FlatNas/
+Porch/
 ├── backend/                        Go 后端
 │   ├── main.go                     路由注册、静态文件、WS/Socket.IO 挂载、BASE_PATH 处理
 │   ├── config/
@@ -111,7 +111,7 @@ FlatNas/
 │   ├── music/  PC/  APP/  doc/     音乐、桌面壁纸、移动壁纸、文件传输落盘
 │   └── public/                     构建产物落点（镜像内生成，不入库）
 │
-├── unraid/                         flatnas.xml（CA 模板）+ 图标
+├── unraid/                         porch.xml（CA 模板）+ 图标
 ├── docs/                           DEPLOY.md / ARCHITECTURE.md / README_UPSTREAM.md
 ├── Dockerfile                      docker-compose.yml / docker-compose.unraid.yml
 ├── Makefile                        build / multiarch / up / logs / test-frontend
@@ -230,10 +230,10 @@ FlatNas/
 npm ci → vite build-only → dist/
         ↑ VITE_DOCKER_BUILD=1 时 outDir=dist
           Windows 本地开发默认 outDir=../server/public（直接给 go run 用）
-go mod download → go build -trimpath -ldflags="-s -w" -o flatnas-backend
+go mod download → go build -trimpath -ldflags="-s -w" -o porch-backend
         ↓
 alpine + tzdata + ca-certificates + wget
-   /app/flatnas-backend
+   /app/porch-backend
    /app/server/public ← dist（HTML + assets + icons）
    /app/server/{data,music,PC,APP,doc}
 ```
@@ -249,7 +249,7 @@ alpine + tzdata + ca-certificates + wget
 | `PORT` | `3000` | 监听端口 |
 | `HOST` | `0.0.0.0` | 监听地址 |
 | `BASE_DIR` | `/app` | 数据根，决定 `server/data` 等路径（镜像内已设） |
-| `BASE_PATH` | 空 | 子路径部署前缀，如 `/flatnas` |
+| `BASE_PATH` | 空 | 子路径部署前缀，如 `/porch` |
 | `PROXY_URL` | 空 | 出站代理，`http/https/socks5/socks5h://[user:pass@]host:port` |
 | `CORS_ALLOW_ORIGINS` | 空（全放行） | 逗号分隔白名单，前后端分离部署时收紧 |
 | `TZ` | `Asia/Shanghai` | 时区 |

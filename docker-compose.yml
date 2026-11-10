@@ -1,18 +1,18 @@
-# FlatNas 通用 Docker Compose
-# 用法：cp .env.example .env && 改 FLATNAS_IMAGE 后 docker compose up -d
+# Porch 通用 Docker Compose
+# 用法：cp .env.example .env && 改 PORCH_IMAGE 后 docker compose up -d
 services:
   flatnas:
-    image: ${FLATNAS_IMAGE:-ghcr.io/mjy378283319/flatnas:latest}
-    container_name: flatnas
+    image: ${PORCH_IMAGE:-ghcr.io/mjy378283319/porch:latest}
+    container_name: porch
     restart: unless-stopped
     ports:
-      - "${FLATNAS_PORT:-23000}:3000"
+      - "${PORCH_PORT:-23000}:3000"
     environment:
       - TZ=${TZ:-Asia/Shanghai}
       - PORT=3000
       - HOST=0.0.0.0
-      # 反向代理挂子路径（如 https://nas.example.com/flatnas/）时启用：
-      # - BASE_PATH=/flatnas
+      # 反向代理挂子路径（如 https://nas.example.com/porch/）时启用：
+      # - BASE_PATH=/porch
       # 需要后端代理外网请求（RSS/热榜/壁纸）时启用：
       # - PROXY_URL=http://192.168.1.2:7890
     volumes:

@@ -26,7 +26,7 @@ var (
 // LuckyStunWebhook 接收 Lucky 的 STUN 穿透状态回调。
 //
 // 这条路由必须匿名可访问：Lucky 在 STUN 规则里配置的全局 Webhook 只会按
-// 「Content-Type: application/json」POST JSON，不会带 FlatNas 的 JWT。
+// 「Content-Type: application/json」POST JSON，不会带 Porch 的 JWT。
 // 请求体形如 {"stun":"success","ip":"1.2.3.4","port":12345}，按原样透传，
 // 多余字段保留，方便 Lucky 后续版本加字段时不用改这里。
 func LuckyStunWebhook(c *gin.Context) {

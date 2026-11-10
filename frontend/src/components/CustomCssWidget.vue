@@ -152,7 +152,7 @@ const applyWidgetJs = () => {
     },
   };
 
-  (window as unknown as Record<string, unknown>).FlatNasWidgetCtx = widgetCtx;
+  (window as unknown as Record<string, unknown>).PorchWidgetCtx = widgetCtx;
 
   const looksModule =
     /^\s*\/\/\s*@module\b/m.test(src) ||
@@ -168,10 +168,10 @@ const applyWidgetJs = () => {
   } else {
     const id = props.widget.id;
     script.textContent =
-      `;(async (ctx) => {\ntry {\n${src}\n} catch (e) {\nconsole.error('[FlatNas Widget JS ${id}]', e);\n}\n})(window.FlatNasWidgetCtx);`;
+      `;(async (ctx) => {\ntry {\n${src}\n} catch (e) {\nconsole.error('[Porch Widget JS ${id}]', e);\n}\n})(window.PorchWidgetCtx);`;
   }
 
-  script.onerror = (e) => console.error(`[FlatNas Widget JS ${props.widget.id}] load error:`, e);
+  script.onerror = (e) => console.error(`[Porch Widget JS ${props.widget.id}] load error:`, e);
   document.body.appendChild(script);
 };
 

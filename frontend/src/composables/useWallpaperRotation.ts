@@ -1,10 +1,10 @@
 import { watch, onMounted, onUnmounted, ref, computed } from "vue";
 import { useMainStore } from "../stores/main";
 
-const STORAGE_KEY_LAST_HASH_PC = "flatnas_wallpaper_last_hash_pc";
-const STORAGE_KEY_LAST_HASH_MOBILE = "flatnas_wallpaper_last_hash_mobile";
-const STORAGE_KEY_LAST_PATH_PC = "flatnas_wallpaper_last_api_path_pc";
-const STORAGE_KEY_LAST_PATH_MOBILE = "flatnas_wallpaper_last_api_path_mobile";
+const STORAGE_KEY_LAST_HASH_PC = "porch_wallpaper_last_hash_pc";
+const STORAGE_KEY_LAST_HASH_MOBILE = "porch_wallpaper_last_hash_mobile";
+const STORAGE_KEY_LAST_PATH_PC = "porch_wallpaper_last_api_path_pc";
+const STORAGE_KEY_LAST_PATH_MOBILE = "porch_wallpaper_last_api_path_mobile";
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 const ONE_DAY_MS = 24 * ONE_HOUR_MS;

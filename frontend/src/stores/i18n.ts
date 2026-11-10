@@ -61,7 +61,7 @@ export const useI18nStore = defineStore("i18n", () => {
 
       // 仅用户手动切换时持久化到 localStorage
       if (persist) {
-        localStorage.setItem("flatnas-locale", locale);
+        localStorage.setItem("porch-locale", locale);
       }
     } catch (e) {
       error.value = (e as Error).message;
@@ -75,7 +75,7 @@ export const useI18nStore = defineStore("i18n", () => {
    * 初始化：用户手动选择 > 浏览器语言（首次访问）> 默认中文
    */
   function initLocale(savedLocale?: string) {
-    const stored = localStorage.getItem("flatnas-locale");
+    const stored = localStorage.getItem("porch-locale");
     const browserLang = navigator.language;
     let locale: string;
 

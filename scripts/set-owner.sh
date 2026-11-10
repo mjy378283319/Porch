@@ -15,7 +15,7 @@ FILES=(
   docker-compose.yml
   docker-compose.unraid.yml
   .env.example
-  unraid/flatnas.xml
+  unraid/porch.xml
   README.md
   docs/DEPLOY.md
 )
@@ -30,4 +30,4 @@ done
 
 echo
 echo "完成。检查一遍镜像地址："
-grep -rn "ghcr.io/${OWNER}/" docker-compose*.yml .env.example unraid/flatnas.xml || true
+grep -rn "ghcr.io/${OWNER}/" docker-compose*.yml .env.example unraid/porch.xml || true

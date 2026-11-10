@@ -1,4 +1,4 @@
-# FlatNas 部署手册（Docker / GHCR / Unraid）
+# Porch 部署手册（Docker / GHCR / Unraid）
 
 面向本 Fork：从源码构建镜像 → 推到自己的 GitHub Container Registry → Unraid 直接拉取运行。
 
@@ -24,8 +24,8 @@
 ## 1. 仓库准备
 
 ```bash
-git clone https://github.com/mjy378283319/FlatNas.git
-cd FlatNas
+git clone https://github.com/mjy378283319/Porch.git
+cd Porch
 ./scripts/set-owner.sh mjy378283319
 git commit -am "chore: set image owner to mjy378283319" && git push
 ```
@@ -33,7 +33,7 @@ git commit -am "chore: set image owner to mjy378283319" && git push
 `set-owner.sh` 会把以下文件里的 `mjy378283319` 换成你的账号：
 
 - `docker-compose.yml`、`docker-compose.unraid.yml`、`.env.example`
-- `unraid/flatnas.xml`（Repository / Registry / Icon / TemplateURL / Support / Project）
+- `unraid/porch.xml`（Repository / Registry / Icon / TemplateURL / Support / Project）
 
 ---
 
@@ -42,10 +42,10 @@ git commit -am "chore: set image owner to mjy378283319" && git push
 ### 2.1 本地单架构构建
 
 ```bash
-docker build -t flatnas:1.2.6 --build-arg VERSION=1.2.6 .
+docker build -t porch:1.2.6 --build-arg VERSION=1.2.6 .
 
 # 或走 Makefile
-make build            # 产出 ghcr.io/mjy378283319/flatnas:1.2.6 与 :latest
+make build            # 产出 ghcr.io/mjy378283319/porch:1.2.6 与 :latest
 ```
 
 国内网络慢可加构建参数（构建期有效，不影响运行期）：
@@ -54,7 +54,7 @@ make build            # 产出 ghcr.io/mjy378283319/flatnas:1.2.6 与 :latest
 docker build \
   --build-arg NPM_REGISTRY=https://registry.npmmirror.com \
   --build-arg GOPROXY=https://goproxy.cn,direct \
-  -t flatnas:1.2.6 .
+  -t porch:1.2.6 .
 ```
 
 ### 2.2 多架构构建并推送 GHCR
@@ -64,20 +64,20 @@ docker build \
 echo <PAT> | docker login ghcr.io -u mjy378283319 --password-stdin
 
 # 2) 创建 buildx 构建器（只需一次）
-docker buildx create --name flatnas-builder --use
+docker buildx create --name porch-builder --use
 docker buildx inspect --bootstrap
 
 # 3) 多架构构建并推送
 docker buildx build --platform linux/amd64,linux/arm64 \
   --build-arg VERSION=1.2.6 \
-  -t ghcr.io/mjy378283319/flatnas:1.2.6 \
-  -t ghcr.io/mjy378283319/flatnas:latest \
+  -t ghcr.io/mjy378283319/porch:1.2.6 \
+  -t ghcr.io/mjy378283319/porch:latest \
   --push .
 
 # 或 make multiarch OWNER=mjy378283319
 ```
 
-推完在 GitHub → 你的头像 → `Your packages` 里能看到 `flatnas`。
+推完在 GitHub → 你的头像 → `Your packages` 里能看到 `porch`。
 
 ### 2.3 用 GitHub Actions 自动构建（推荐）
 
@@ -89,13 +89,13 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 1. **Actions 权限**：仓库 `Settings → Actions → General → Workflow permissions` 选  
    `Read and write permissions`（否则 `packages: write` 会被拒）。
 2. **包可见性**：默认私有仓库产出的镜像也是私有。Unraid 拉取需登录（见 3.4）；  
-   想公开则在 `Packages → flatnas → Package settings → Change visibility` 改为 Public。
+   想公开则在 `Packages → porch → Package settings → Change visibility` 改为 Public。
 
 打 tag 会自动产生语义化版本标签：
 
 ```bash
 git tag v1.2.6 && git push origin v1.2.6
-# → ghcr.io/mjy378283319/flatnas:1.2.6 / :1.2 / :latest
+# → ghcr.io/mjy378283319/porch:1.2.6 / :1.2 / :latest
 ```
 
 手动触发（可选自定义平台，例如给老 ARM NAS 加 `linux/arm/v7`）：
@@ -111,7 +111,7 @@ Actions → Build & Publish Image (GHCR) → Run workflow → platforms: linux/a
 此时用仓库自带的 API 推送脚本，它按本地提交链逐条重建 tree/commit，**远端 sha 与本地完全一致**：
 
 ```bash
-python scripts/api_push.py --pat <你的PAT文件> --repo <owner>/FlatNas --jobs 8
+python scripts/api_push.py --pat <你的PAT文件> --repo <owner>/Porch --jobs 8
 ```
 
 - 只上传远端缺失的 blob（按内容 sha 去重），增量推送通常几十秒
@@ -130,26 +130,26 @@ python scripts/api_push.py --pat <你的PAT文件> --repo <owner>/FlatNas --jobs
 
 ### 3.1 方式一：Unraid 模板（图形化，最省事）
 
-1. 先确认 `unraid/flatnas.xml` 里的 `Repository` 是 `ghcr.io/mjy378283319/flatnas:latest`（跑过 `set-owner.sh` 即已正确）。
+1. 先确认 `unraid/porch.xml` 里的 `Repository` 是 `ghcr.io/mjy378283319/porch:latest`（跑过 `set-owner.sh` 即已正确）。
 2. Unraid → `Docker` → `Add Container`，右上角 `Template` 输入框粘贴：
    ```
-   https://raw.githubusercontent.com/mjy378283319/FlatNas/main/unraid/flatnas.xml
+   https://raw.githubusercontent.com/mjy378283319/Porch/main/unraid/porch.xml
    ```
    私有仓库 raw 链接不可匿名访问时，改用方式二/三，或把该 XML 上传到  
-   `/boot/config/plugins/dockerMan/templates-user/my-FlatNas.xml` 后在模板下拉里选 “FlatNas”。
+   `/boot/config/plugins/dockerMan/templates-user/my-Porch.xml` 后在模板下拉里选 “Porch”。
 3. 表单里已预置好：端口 `23000 → 3000`、5 个 appdata 路径、`TZ`，以及可选的 `BASE_PATH` / `PROXY_URL`  
    和 Docker Socket。确认路径后 `Apply`。
 4. 浏览器打开 `http://<Unraid-IP>:23000`，用 `admin`/`admin` 登录并改密码。
 
 ### 3.2 方式二：Compose Manager（Stack）
 
-Unraid 装 `Compose Manager` 插件 → `Compose` → `Add New Stack` → 名称 `flatnas` →  
+Unraid 装 `Compose Manager` 插件 → `Compose` → `Add New Stack` → 名称 `porch` →  
 把 `docker-compose.unraid.yml` 内容整段粘进去 → `Compose Up`。
 
 目录规划（默认全部落在 appdata，Unraid 备份只认这一个目录）：
 
 ```
-/mnt/user/appdata/flatnas/
+/mnt/user/appdata/porch/
 ├── data/     配置、用户、版本快照、图标缓存   ← 必备份
 ├── music/    音乐播放器音频
 ├── PC/       桌面壁纸
@@ -161,15 +161,15 @@ Unraid 装 `Compose Manager` 插件 → `Compose` → `Add New Stack` → 名称
 
 | 字段           | 值                                                            |
 | ------------ | ------------------------------------------------------------ |
-| Name         | `flatnas`                                                    |
-| Repository   | `ghcr.io/mjy378283319/flatnas:latest`                             |
+| Name         | `porch`                                                    |
+| Repository   | `ghcr.io/mjy378283319/porch:latest`                             |
 | Network Type | `bridge`                                                     |
 | Port         | `23000` / 容器端口 `3000` / TCP                                  |
-| Path 1       | `/mnt/user/appdata/flatnas/data` → `/app/server/data` (rw)   |
-| Path 2       | `/mnt/user/appdata/flatnas/music` → `/app/server/music` (rw) |
-| Path 3       | `/mnt/user/appdata/flatnas/PC` → `/app/server/PC` (rw)       |
-| Path 4       | `/mnt/user/appdata/flatnas/APP` → `/app/server/APP` (rw)     |
-| Path 5       | `/mnt/user/appdata/flatnas/doc` → `/app/server/doc` (rw)     |
+| Path 1       | `/mnt/user/appdata/porch/data` → `/app/server/data` (rw)   |
+| Path 2       | `/mnt/user/appdata/porch/music` → `/app/server/music` (rw) |
+| Path 3       | `/mnt/user/appdata/porch/PC` → `/app/server/PC` (rw)       |
+| Path 4       | `/mnt/user/appdata/porch/APP` → `/app/server/APP` (rw)     |
+| Path 5       | `/mnt/user/appdata/porch/doc` → `/app/server/doc` (rw)     |
 | Path 6（可选）   | `/var/run/docker.sock` → `/var/run/docker.sock` (rw)         |
 | Variable     | `TZ` = `Asia/Shanghai`                                       |
 
@@ -185,7 +185,7 @@ docker login ghcr.io -u mjy378283319
 # 密码粘贴 PAT（classic，勾 read:packages 即可）
 ```
 
-`docker pull ghcr.io/mjy378283319/flatnas:latest` 成功即说明凭据可用。换 token 或报  
+`docker pull ghcr.io/mjy378283319/porch:latest` 成功即说明凭据可用。换 token 或报  
 `denied: denied` 时重新 login。
 
 ### 3.5 权限说明
@@ -220,16 +220,16 @@ location / {
 
 Nginx Proxy Manager 里勾选 `Websockets Support` + `Block Common Exploits` 关闭即可。
 
-### 4.2 子路径部署（`https://nas.example.com/flatnas/`）
+### 4.2 子路径部署（`https://nas.example.com/porch/`）
 
 两处必须同时改，缺一白屏：
 
-1. 容器环境变量 `BASE_PATH=/flatnas`
+1. 容器环境变量 `BASE_PATH=/porch`
 2. 反代保留前缀并透传：
 
 ```nginx
-location /flatnas/ {
-    proxy_pass http://<UNRAID-IP>:23000/flatnas/;
+location /porch/ {
+    proxy_pass http://<UNRAID-IP>:23000/porch/;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -266,7 +266,7 @@ Body 用：
 { "stun": "success", "ip": "#{ip}", "port": "#{port}" }
 ```
 
-Lucky 每次穿透状态变化都会 POST 一次，FlatNas 收到后通过 WebSocket 推给所有已登录页面，
+Lucky 每次穿透状态变化都会 POST 一次，Porch 收到后通过 WebSocket 推给所有已登录页面，
 设置面板的「最新状态」会实时刷新；断线时点「刷新数据」也能拉到最近一次快照。
 
 两个注意点：
@@ -288,9 +288,9 @@ Fork 后已默认指向本仓库；如果仓库保持私有，浏览器匿名请
 
 ```bash
 # 只需备 data 目录（其余是用户自己的媒体文件）
-docker stop flatnas
-tar -czf flatnas-data-$(date +%F).tar.gz -C /mnt/user/appdata/flatnas data
-docker start flatnas
+docker stop porch
+tar -czf porch-data-$(date +%F).tar.gz -C /mnt/user/appdata/porch data
+docker start porch
 ```
 
 `data/` 里最关键的是 `data.json`（全部布局/书签/组件配置）、`system.json`（认证模式）、  
@@ -300,7 +300,7 @@ docker start flatnas
 ### 升级
 
 ```bash
-docker pull ghcr.io/mjy378283319/flatnas:latest
+docker pull ghcr.io/mjy378283319/porch:latest
 docker compose -f docker-compose.unraid.yml up -d      # 或 Unraid UI 里 Force Update
 ```
 
@@ -309,7 +309,7 @@ docker compose -f docker-compose.unraid.yml up -d      # 或 Unraid UI 里 Force
 ### 回滚
 
 ```bash
-docker pull ghcr.io/mjy378283319/flatnas:1.2.6     # 拉回旧 tag
+docker pull ghcr.io/mjy378283319/porch:1.2.6     # 拉回旧 tag
 docker compose up -d                          # compose 里把 tag 改成 1.2.6
 ```
 
@@ -318,11 +318,11 @@ docker compose up -d                          # compose 里把 tag 改成 1.2.6
 ## 6. 常用运维命令
 
 ```bash
-docker logs -f --tail=200 flatnas                 # 实时日志
-docker inspect --format '{{.State.Health.Status}}' flatnas   # 健康状态
+docker logs -f --tail=200 porch                 # 实时日志
+docker inspect --format '{{.State.Health.Status}}' porch   # 健康状态
 curl -s http://127.0.0.1:23000/api/system-config  # 后端存活探测（健康检查同款）
 curl -s http://127.0.0.1:23000/api/version        # 版本
-docker stats --no-stream flatnas                  # 资源占用
+docker stats --no-stream porch                  # 资源占用
 ```
 
 ---

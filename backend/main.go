@@ -346,7 +346,7 @@ func main() {
 		// 书签自动抓取标题/图标（前端 fetch 不带 JWT，故用 OptionalAuth 而非强制鉴权）
 		api.GET("/fetch-meta", middleware.OptionalAuthMiddleware(), handlers.FetchMeta)
 
-		// Lucky STUN 穿透状态回调。POST 必须匿名：Lucky 的全局 Webhook 不会带 FlatNas 的 JWT。
+		// Lucky STUN 穿透状态回调。POST 必须匿名：Lucky 的全局 Webhook 不会带 Porch 的 JWT。
 		// 若实例暴露公网，建议在反代上限制该路径的来源 IP。
 		api.POST("/webhook/lucky/stun", handlers.LuckyStunWebhook)
 		api.GET("/webhook/lucky/stun", middleware.OptionalAuthMiddleware(), handlers.GetLuckyStun)

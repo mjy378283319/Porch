@@ -70,11 +70,11 @@ const t = toRef(ctx, "t");
                   <div class="text-xs text-gray-500">
                     {{ $t('settings.about.officialSite') }}：
                     <a
-                      href="https://flatnas.top/"
+                      href="https://porch.top/"
                       target="_blank"
                       class="text-gray-600 underline hover:text-gray-900"
                     >
-                      https://flatnas.top/
+                      https://porch.top/
                     </a>
                   </div>
                   <div class="text-xs text-gray-500">

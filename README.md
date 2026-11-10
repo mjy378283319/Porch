@@ -1,11 +1,11 @@
-# FlatNas（自托管分支）
+# Porch（自托管分支）
 
 > 轻量级个人导航页与仪表盘：左侧书签/分组侧栏 + 顶部搜索 + 可自由拖拽的组件网格，内置 20+ 组件，
 > 无数据库、纯文件存储。一个容器跑起来，就是一台 NAS 的门户首页。
 
 ![总览](public/1.png)
 
-本仓库是 [Garry-QD/FlatNas](https://github.com/Garry-QD/FlatNas) v1.2.6 的自托管分支（Fork），
+本仓库是 [上游项目](https://github.com/Garry-QD/FlatNas) v1.2.6 的自托管分支（Fork），
 为 **Docker / Unraid 拉取部署** 做了裁剪与容器化改造；功能逻辑、UI 布局、数据格式与上游完全一致，
 上游的配置备份、自定义 CSS/JS 可直接迁移过来。上游原始说明见 [docs/README_UPSTREAM.md](docs/README_UPSTREAM.md)。
 
@@ -15,7 +15,7 @@
 | --- | --- | --- |
 | 分发方式 | Docker Hub 预构建 + Debian 脚本 + Release 二进制 | 只走 Docker / GHCR 自建镜像（源码可复现） |
 | 仓库体积 | 含打包产物、示例媒体、构建产物（约 235 MB） | 只留可构建源码 + 图标库（约 45 MB） |
-| 镜像构建 | 推 Docker Hub | GitHub Actions → `ghcr.io/mjy378283319/flatnas`，amd64/arm64 |
+| 镜像构建 | 推 Docker Hub | GitHub Actions → `ghcr.io/mjy378283319/porch`，amd64/arm64 |
 | 编排文件 | 单一 compose | 通用 compose + Unraid 专用 compose + CA 模板 |
 | 镜像细节 | 无健康检查 | `HEALTHCHECK`、OCI labels、显式 `PORT/HOST/BASE_DIR` |
 
@@ -49,9 +49,9 @@
 ### Docker Compose
 
 ```bash
-git clone https://github.com/mjy378283319/FlatNas.git
-cd FlatNas
-cp .env.example .env      # 把 FLATNAS_IMAGE 改成你的镜像地址
+git clone https://github.com/mjy378283319/Porch.git
+cd Porch
+cp .env.example .env      # 把 PORCH_IMAGE 改成你的镜像地址
 docker compose up -d
 ```
 
@@ -60,22 +60,22 @@ docker compose up -d
 ### 直接拉镜像
 
 ```bash
-docker run -d --name flatnas -p 23000:3000 \
+docker run -d --name porch -p 23000:3000 \
   -v $PWD/data:/app/server/data \
   -v $PWD/music:/app/server/music \
   -v $PWD/PC:/app/server/PC \
   -v $PWD/APP:/app/server/APP \
   -v $PWD/doc:/app/server/doc \
-  ghcr.io/mjy378283319/flatnas:latest
+  ghcr.io/mjy378283319/porch:latest
 ```
 
 ### Unraid
 
 三选一，详见 [docs/DEPLOY.md](docs/DEPLOY.md#3-unraid-部署)：
 
-1. **模板**：`Docker` → `Add Container` → 模板 URL 填 `.../unraid/flatnas.xml`
+1. **模板**：`Docker` → `Add Container` → 模板 URL 填 `.../unraid/porch.xml`
 2. **Compose Manager**：新建 Stack，粘贴 `docker-compose.unraid.yml`
-3. **手动**：镜像 `ghcr.io/mjy378283319/flatnas:latest`，端口 `23000:3000`，挂 5 个 appdata 目录
+3. **手动**：镜像 `ghcr.io/mjy378283319/porch:latest`，端口 `23000:3000`，挂 5 个 appdata 目录
 
 > GHCR 私有镜像先登录：`docker login ghcr.io -u <用户名>`，密码用 PAT（勾 `read:packages`）。
 
@@ -90,7 +90,7 @@ docker run -d --name flatnas -p 23000:3000 \
 ## 目录速览
 
 ```
-FlatNas/
+Porch/
 ├── backend/                 Go/Gin 后端（API、WebSocket、Docker、监控、文件传输）
 ├── frontend/                Vue 3 + Vite 前端（组件、store、i18n、图标素材）
 ├── server/                  运行期数据目录（data/music/PC/APP/doc，容器挂载点）
@@ -111,5 +111,5 @@ AGPLv3 要求：分发修改版（包括以容器镜像对外提供网络服务�
 
 ## 致谢
 
-- 原作者：[Garry-QD/FlatNas](https://github.com/Garry-QD/FlatNas)
-- 上游文档：<https://flatnas.top/>
+- 上游项目：[(https://github.com/Garry-QD/FlatNas)
+- 上游文档：<https://porch.top/>
