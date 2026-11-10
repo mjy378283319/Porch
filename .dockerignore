@@ -34,6 +34,7 @@ server/public/*
 docs
 unraid
 tools
+design
 public
 *.md
 !frontend/README.md
