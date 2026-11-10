@@ -2911,7 +2911,7 @@ onUnmounted(() => {
       <div
         v-else-if="!store.appConfig.empireMode"
         class="absolute inset-0 transition-all duration-500"
-        style="background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%)"
+        style="background-image: radial-gradient(ellipse at 12% 0%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 60%), linear-gradient(135deg, #F7FAFA 0%, #EAF1F3 50%, #DCE8EA 100%)"
       ></div>
 
       <!-- Empire Mode Background -->
