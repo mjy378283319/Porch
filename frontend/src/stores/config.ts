@@ -110,7 +110,7 @@ export const useConfigStore = defineStore("config", () => {
     daylightModeEnabled: false,
     daylightMask: 0.5,
     weatherEffectEnabled: false,
-    customTitle: "我的导航",
+    customTitle: "Porch",
     titleAlign: "left",
     titleSize: 48,
     titleColor: "#33475B",
