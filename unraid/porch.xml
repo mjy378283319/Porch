@@ -12,8 +12,8 @@
   <Overview>轻量级个人导航页与仪表盘：书签分组、多引擎搜索、可拖拽组件网格（Docker 管理、系统监控、RSS、热搜、天气时钟、日历、待办、备忘录、文件传输、音乐），单容器、无数据库、配置只存一个 JSON。 A self-hosted start page for your NAS: bookmarks, multi-engine search and a draggable widget grid (Docker, system stats, RSS, trending, weather, calendar, todos, memos, file transfer, music). Single container, no database.</Overview>
   <Category>Tools:Utilities</Category>
   <WebUI>http://[IP]:[PORT:3000]/</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/mjy378283319/Porch/main/unraid/porch.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/mjy378283319/Porch/main/unraid/porch-icon.png</Icon>
+  <TemplateURL>https://cdn.jsdelivr.net/gh/mjy378283319/Porch@main/unraid/porch.xml</TemplateURL>
+  <Icon>https://cdn.jsdelivr.net/gh/mjy378283319/Porch@main/unraid/porch-icon.png</Icon>
   <ExtraParams>--restart=unless-stopped</ExtraParams>
   <PostArgs/>
   <CPUset/>
