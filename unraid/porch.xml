@@ -10,7 +10,7 @@
   <Support>https://github.com/mjy378283319/Porch/issues</Support>
   <Project>https://github.com/mjy378283319/Porch</Project>
   <Overview>轻量级个人导航页与仪表盘（Vue 3 + Go/Gin，无数据库，纯文件存储）。内置书签/分组、拖拽组件网格、时钟天气、日历、备忘录、待办、RSS、热搜榜、音乐播放器、文件传输助手、Docker 管理、宿主机监控等 20+ 组件。默认密码 admin，首次登录后请在设置中修改。</Overview>
-  <Category>Tools: Productivity: Utilities</Category>
+  <Category>Tools:Utilities</Category>
   <WebUI>http://[IP]:[PORT:3000]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/mjy378283319/Porch/main/unraid/porch.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/mjy378283319/Porch/main/unraid/porch-icon.png</Icon>

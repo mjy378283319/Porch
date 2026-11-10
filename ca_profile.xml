@@ -1,0 +1,11 @@
+<CommunityApplications>
+  <Profile>Porch is a self-hosted start page and dashboard for your NAS. A sidebar holds bookmarks and groups, the top bar does multi-engine search, and the main area is a draggable widget grid: clock and weather, calendar, todos, memos, RSS, trending lists, Docker container control, system stats, file transfer, music player, iframe and custom HTML/CSS/JS.
+
+Single container, no database - the whole configuration lives in one JSON file, so backup and migration only need the appdata folder. LAN/WAN URL switching and multi-device sync are built in. Made for Unraid and Docker.
+
+This is a fork of FlatNas (AGPLv3); upstream attribution is kept in NOTICE. Report issues at https://github.com/mjy378283319/Porch/issues</Profile>
+  <Icon>https://raw.githubusercontent.com/mjy378283319/Porch/main/unraid/porch-icon.png</Icon>
+  <WebPage>https://github.com/mjy378283319/Porch</WebPage>
+  <Forum>https://github.com/mjy378283319/Porch/issues</Forum>
+  <Photo>https://raw.githubusercontent.com/mjy378283319/Porch/main/public/1.png</Photo>
+</CommunityApplications>
