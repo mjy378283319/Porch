@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-labelledby="t d">
+  <title id="t">Porch</title>
+  <desc id="d">A rounded window: left sidebar rail, top search bar, one large bright widget card and two smaller cards.</desc>
+  <rect width="128" height="128" rx="28" fill="#24445C"/>
+  <rect x="17" y="18" width="22" height="92" rx="7" fill="#7FA3BC"/>
+  <rect x="47" y="18" width="64" height="13" rx="6.5" fill="#F4EFE6"/>
+  <rect x="47" y="42" width="40" height="68" rx="10" fill="#F4EFE6"/>
+  <rect x="94" y="42" width="17" height="31" rx="6" fill="#7FA3BC"/>
+  <rect x="94" y="79" width="17" height="31" rx="6" fill="#7FA3BC"/>
+</svg>
