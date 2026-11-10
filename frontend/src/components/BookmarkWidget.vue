@@ -442,6 +442,23 @@ const handleScrollIsolation = (e: WheelEvent) => {
         </div>
       </div>
 
+      <div
+        v-if="filteredData.length === 0 && !isAddingCategory"
+        class="h-full min-h-[160px] flex flex-col items-center justify-center text-center gap-3 py-6"
+      >
+        <div class="text-3xl opacity-40">📑</div>
+        <p class="text-xs text-white/60 leading-relaxed">
+          还没有分类<br />点右上角「+ 分类」新建，或用「导入」导入浏览器收藏夹
+        </p>
+        <button
+          v-if="store.isLogged"
+          @click="addCategory"
+          class="text-xs px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white transition-colors"
+        >
+          新建分类
+        </button>
+      </div>
+
       <div v-for="cat in filteredData" :key="cat.id">
         <div class="flex items-center justify-between mb-2 group/cat border-b border-white/10 pb-1">
           <span

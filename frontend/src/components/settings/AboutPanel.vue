@@ -14,7 +14,7 @@ const t = toRef(ctx, "t");
   <div v-if="activeTab === 'about'" class="min-h-full flex flex-col p-8 -mt-4">
     <div class="bg-white/60 border border-gray-100 rounded-xl p-6">
       <div class="flex items-center gap-4">
-        <img src="/ICON.PNG" alt="Porch" class="w-14 h-14 rounded-xl shadow-sm" />
+        <img src="/porch-app-icon.png" alt="Porch" class="w-14 h-14 rounded-xl shadow-sm" />
         <div class="min-w-0">
           <div class="text-lg font-bold text-gray-900">Porch</div>
           <div class="text-xs text-gray-500">自托管导航页与仪表盘</div>

@@ -104,7 +104,13 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=23100)
     ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--data", help="用指定的 data.json 代替 default.json，便于复现某个实例的组件列表")
     args = ap.parse_args()
+    if args.data:
+        custom = json.loads(Path(args.data).read_text(encoding="utf-8-sig"))
+        # 原地更新，路由里的 lambda 引用的是同一个对象
+        APP_DATA.clear()
+        APP_DATA.update(custom)
     mimetypes.add_type("application/javascript", ".js")
     mimetypes.add_type("text/css", ".css")
     if not (DIST / "index.html").exists():

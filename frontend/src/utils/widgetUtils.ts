@@ -24,6 +24,16 @@ export function createDefaultWidgetList(isLoggedIn: boolean): WidgetConfig[] {
       isPublic: true,
     },
     { id: "sidebar", type: "sidebar", enable: false, isPublic: true },
+    // 收藏夹：老配置里没有这个组件时由 normalizeIncomingWidgets 自动补上，
+    // 否则「单开组件」里永远看不到它（默认配置里有，但已存盘的 data.json 不会跟着变）。
+    {
+      id: "bookmarks",
+      type: "bookmarks",
+      enable: true,
+      colSpan: 1,
+      rowSpan: 4,
+      isPublic: false,
+    },
     { id: "docker", type: "docker", enable: false, isPublic: true, colSpan: 1, rowSpan: 1 },
     {
       id: "file-transfer",
@@ -68,7 +78,14 @@ export function createDefaultWidgetList(isLoggedIn: boolean): WidgetConfig[] {
   // Filter out login-only widgets for guests
   if (!isLoggedIn) {
     return base.filter((w) => {
-      const loginOnly = ["docker", "file-transfer", "system-status", "sidebar", "status-monitor"];
+      const loginOnly = [
+        "docker",
+        "file-transfer",
+        "system-status",
+        "sidebar",
+        "status-monitor",
+        "bookmarks",
+      ];
       return !loginOnly.includes(w.id);
     });
   }

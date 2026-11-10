@@ -375,7 +375,7 @@ watch(activeTab, (val) => {
   console.log("Active Tab Changed:", val);
 });
 
-const iconSrc = ref("/ICON.PNG");
+const iconSrc = ref("/porch-app-icon.png");
 
 // Ensure Docker Widget Exists
 onMounted(async () => {
