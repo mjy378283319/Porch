@@ -624,7 +624,7 @@
           "title": "导入收藏 2025/12/8"
         }
       ],
-      "enable": false,
+      "enable": true,
       "id": "w6",
       "isPublic": false,
       "rowSpan": 4,

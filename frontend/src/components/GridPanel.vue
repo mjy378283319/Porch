@@ -2869,7 +2869,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flatnas-handshake-signal" style="display: none !important"></div>
   <div
     class="min-h-dvh relative overflow-hidden flex flex-col pt-[env(safe-area-inset-top)]"
     :class="{ 'empire-theme': store.appConfig.empireMode }"
@@ -3175,7 +3174,7 @@ onUnmounted(() => {
           </div>
 
           <div
-            class="flex gap-1 xl:gap-3 flex-shrink-0 z-10 items-center transition-all duration-500 flatnas-handshake-signal absolute left-0 top-0 w-full xl:w-auto xl:static opacity-80 hover:opacity-100 xl:opacity-100 pointer-events-none xl:pointer-events-auto"
+            class="flex gap-1 xl:gap-3 flex-shrink-0 z-10 items-center transition-all duration-500 absolute left-0 top-0 w-full xl:w-auto xl:static opacity-80 hover:opacity-100 xl:opacity-100 pointer-events-none xl:pointer-events-auto"
             :style="{ order: isHeaderRowLayout && store.appConfig.titleAlign === 'right' ? 0 : 2 }"
           >
             <MiniPlayer

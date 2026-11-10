@@ -20,7 +20,7 @@ import ProxyToggle from "../ProxyToggle.vue";
 </script>
 
 <template>
-          <div v-if="activeTab === 'universal-window'" class="flatnas-handshake-signal space-y-4">
+          <div v-if="activeTab === 'universal-window'" class="space-y-4">
             <!-- Universal Window Widget Section -->
             <div class="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
               <div class="flex items-center gap-2">
@@ -40,7 +40,7 @@ import ProxyToggle from "../ProxyToggle.vue";
             <template v-for="w in store.widgets" :key="'iframe-' + w.id">
               <div
                 v-if="w.type === 'iframe'"
-                class="flatnas-handshake-signal flex flex-col gap-3 p-4 border border-gray-100 rounded-xl hover:shadow-md transition-all glass-card"
+                class="flex flex-col gap-3 p-4 border border-gray-100 rounded-xl hover:shadow-md transition-all glass-card"
               >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-4">
@@ -166,13 +166,8 @@ import ProxyToggle from "../ProxyToggle.vue";
                     </div>
                   </div>
                   <p class="text-[10px] text-gray-500 mt-1">
-                    点击<a
-                      href="/flatnas-helper.zip"
-                      download="flatnas-helper.zip"
-                      target="_blank"
-                      class="text-blue-500 underline mx-1"
-                      >{{ $t('settings.extraSections.downloadBrowserPlugin') }}</a
-                    >{{ $t('settings.extraSections.removeRestriction') }}
+                    目标站点若禁止被嵌入（X-Frame-Options 或 CSP frame-ancestors），这里会显示空白。
+                    可改用「新标签打开」，或在该站点的响应头里单独放行本域。
                   </p>
                   <p class="text-[10px] text-gray-400 mt-1">
                     {{ $t('settings.extraSections.networkSwitchHint') }}
@@ -200,7 +195,7 @@ import ProxyToggle from "../ProxyToggle.vue";
             <template v-for="w in store.widgets" :key="'amap-' + w.id">
               <div
                 v-if="w.type === 'amap-weather'"
-                class="flatnas-handshake-signal flex flex-col gap-3 p-4 border border-gray-100 rounded-xl bg-gray-50 hover:bg-white hover:shadow-md transition-all"
+                class="flex flex-col gap-3 p-4 border border-gray-100 rounded-xl bg-gray-50 hover:bg-white hover:shadow-md transition-all"
               >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-4">
@@ -290,7 +285,7 @@ import ProxyToggle from "../ProxyToggle.vue";
             <template v-for="w in store.widgets" :key="'cd-' + w.id">
               <div
                 v-if="w.type === 'countdown'"
-                class="flatnas-handshake-signal flex flex-col gap-3 p-4 border border-gray-100 rounded-xl bg-gray-50 hover:bg-white hover:shadow-md transition-all"
+                class="flex flex-col gap-3 p-4 border border-gray-100 rounded-xl bg-gray-50 hover:bg-white hover:shadow-md transition-all"
               >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-4">
@@ -398,7 +393,7 @@ import ProxyToggle from "../ProxyToggle.vue";
             <template v-for="w in store.widgets" :key="'cup-' + w.id">
               <div
                 v-if="w.type === 'countup'"
-                class="flatnas-handshake-signal flex flex-col gap-3 p-4 border border-gray-100 rounded-xl bg-gray-50 hover:bg-white hover:shadow-md transition-all"
+                class="flex flex-col gap-3 p-4 border border-gray-100 rounded-xl bg-gray-50 hover:bg-white hover:shadow-md transition-all"
               >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-4">

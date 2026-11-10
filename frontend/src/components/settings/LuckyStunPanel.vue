@@ -1,15 +1,14 @@
 <script setup lang="ts">
 // 该面板由 SettingsModal.vue 拆分而来：模板保持原样，状态通过 inject 取父级上下文。
-import { inject, toRef } from "vue";
+import { computed, inject, toRef } from "vue";
 import { SETTINGS_CTX } from "./context";
+import { buildQuickAddBookmarklet } from "@/utils/quickAdd";
 
 const ctx = inject(SETTINGS_CTX) as Record<string, any>;
 
 const activeTab = toRef(ctx, "activeTab");
 const addAmapWeatherWidget = toRef(ctx, "addAmapWeatherWidget");
 const addMusicWidget = toRef(ctx, "addMusicWidget");
-const browserHelperHandshakeLink = toRef(ctx, "browserHelperHandshakeLink");
-const copyBrowserHelperHandshakeLink = toRef(ctx, "copyBrowserHelperHandshakeLink");
 const copyWebhookUrl = toRef(ctx, "copyWebhookUrl");
 const formatTime = toRef(ctx, "formatTime");
 const getMusicAvatarUrl = toRef(ctx, "getMusicAvatarUrl");
@@ -18,7 +17,6 @@ const isTestingMusicAuth = toRef(ctx, "isTestingMusicAuth");
 const isTestingWeather = toRef(ctx, "isTestingWeather");
 const isUpdatingProfile = toRef(ctx, "isUpdatingProfile");
 const musicWidget = toRef(ctx, "musicWidget");
-const openBrowserHelperHandshakeLink = toRef(ctx, "openBrowserHelperHandshakeLink");
 const openRenameModal = toRef(ctx, "openRenameModal");
 const removeWidget = toRef(ctx, "removeWidget");
 const selectedMusicSize = toRef(ctx, "selectedMusicSize");
@@ -33,6 +31,15 @@ const testWeatherConnection = toRef(ctx, "testWeatherConnection");
 const testWeatherResult = toRef(ctx, "testWeatherResult");
 
 import ScriptManager from "../ScriptManager.vue";
+
+const quickAddBookmarklet = computed(() => buildQuickAddBookmarklet());
+const copyQuickAddBookmarklet = () => {
+  const code = quickAddBookmarklet.value;
+  navigator.clipboard.writeText(code).then(
+    () => alert("已复制，粘贴到新书签的网址栏即可"),
+    () => alert("复制失败，请手动选中脚本内容复制"),
+  );
+};
 </script>
 
 <template>
@@ -44,56 +51,34 @@ import ScriptManager from "../ScriptManager.vue";
             </div>
 
             <div class="bg-gray-50 border border-gray-100 rounded-xl p-4 mb-6 space-y-3">
-              <div class="flex items-center justify-between gap-3">
-                <div>
-                  <h4 class="text-base font-bold text-gray-900">{{ $t('settings.extraSections.browserHelperComms') }}</h4>
-                  <p class="text-xs text-gray-500 mt-1">
-                    {{ $t('settings.extraSections.browserHelperDesc') }}
-                  </p>
-                </div>
+              <div>
+                <h4 class="text-base font-bold text-gray-900">快速收藏</h4>
+                <p class="text-xs text-gray-500 mt-1">
+                  把右边的「快速收藏」拖到浏览器书签栏。在任何网页点它，就会跳回这里并把当前页加进收藏夹。
+                  不装扩展、不在网页注入脚本，所以不会拖慢任何站点。
+                </p>
               </div>
 
-              <template v-if="browserHelperHandshakeLink">
+              <div class="flex flex-wrap items-center gap-2">
                 <a
-                  :href="browserHelperHandshakeLink"
-                  :data-flatnas-helper-link="browserHelperHandshakeLink"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="block w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-[11px] text-blue-600 break-all hover:border-blue-300 transition-colors"
+                  :href="quickAddBookmarklet"
+                  class="px-3 py-1.5 bg-gray-900 hover:bg-black text-white text-xs rounded-lg transition-colors cursor-grab active:cursor-grabbing no-underline"
+                  title="拖到书签栏"
                 >
-                  {{ browserHelperHandshakeLink }}
+                  快速收藏
                 </a>
-                <div class="flex flex-wrap items-center gap-2">
-                  <button
-                    @click="copyBrowserHelperHandshakeLink"
-                    class="px-3 py-1.5 bg-gray-900 hover:bg-black text-white text-xs rounded-lg transition-colors"
-                  >
-                    复制握手链接
-                  </button>
-                  <button
-                    @click="openBrowserHelperHandshakeLink"
-                    class="px-3 py-1.5 bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-xs rounded-lg transition-colors"
-                  >
-                    打开握手页
-                  </button>
-                  <a
-                    href="https://qdnas.icu/c/8/g/14"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-lg transition-colors inline-block"
-                  >
-                    下载浏览器助手
-                  </a>
-                </div>
-                <p class="text-[11px] text-gray-500">
-                  {{ $t('settings.extraSections.helperNotDetected') }}
-                </p>
-              </template>
-              <p v-else class="text-[11px] text-amber-600">
-                {{ $t('settings.extraSections.noLoginToken') }}
+                <button
+                  @click="copyQuickAddBookmarklet"
+                  class="px-3 py-1.5 bg-white border border-gray-200 hover:border-gray-300 text-gray-700 text-xs rounded-lg transition-colors"
+                >
+                  复制脚本
+                </button>
+              </div>
+
+              <p class="text-[11px] text-gray-500">
+                手动方式：新建一个书签，名称随意，把复制到的整段 javascript: 代码粘贴到网址栏即可。
               </p>
             </div>
-
 
             <!-- Music Widget Settings -->
             <div id="music-settings" class="bg-gray-50 border border-gray-100 rounded-xl p-4 mb-6">

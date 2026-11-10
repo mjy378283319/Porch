@@ -1151,41 +1151,6 @@ const getWebhookUrl = () => {
   return toApiUrl("/api/webhook/lucky/stun");
 };
 
-const browserHelperHandshakeLink = computed(() => {
-  if (typeof window === "undefined") return "";
-  const token = localStorage.getItem("flat-nas-token") || "";
-  if (!token) return "";
-
-  const origin = window.location.origin;
-  const url = new URL(`${origin}/`);
-  const params = new URLSearchParams();
-  params.set("flatnas-helper-handshake", "1");
-  params.set("origin", origin);
-  params.set("token", token);
-  params.set("source", "open-center");
-  url.hash = params.toString();
-  return url.toString();
-});
-
-const copyBrowserHelperHandshakeLink = async () => {
-  const link = browserHelperHandshakeLink.value;
-  if (!link) {
-    alert(t('settings.messages.loginFirst'));
-    return;
-  }
-  await navigator.clipboard.writeText(link);
-  alert(t('settings.messages.copiedHandshake'));
-};
-
-const openBrowserHelperHandshakeLink = () => {
-  const link = browserHelperHandshakeLink.value;
-  if (!link) {
-    alert(t('settings.messages.loginFirst'));
-    return;
-  }
-  window.open(link, "_blank", "noopener,noreferrer");
-};
-
 const copyWebhookUrl = () => {
   navigator.clipboard.writeText(getWebhookUrl()).then(() => {
     alert(t('settings.messages.copiedWebhook'));
@@ -1227,6 +1192,8 @@ const isUnknownWidget = (type: string) => {
     "status-monitor",
     "file-transfer",
     "music",
+    "custom-css",
+    "div-card",
   ];
 
   return !knownTypes.includes(type);
@@ -1869,11 +1836,9 @@ provide(
   addIframeWidget,
   addMusicWidget,
   applyLatencyThreshold,
-  browserHelperHandshakeLink,
   canManageUsers,
   checkDockerConnection,
   confirmTempInput,
-  copyBrowserHelperHandshakeLink,
   copyWebhookUrl,
   daoliyuLogo,
   daylightMaskPercent,
@@ -1929,7 +1894,6 @@ provide(
   onLatencyThresholdInput,
   onMobileDockerDisplayChange,
   onMobileSystemStatusDisplayChange,
-  openBrowserHelperHandshakeLink,
   openRenameModal,
   passwordInput,
   removeWidget,
