@@ -1,7 +1,7 @@
 # Porch 通用 Docker Compose
 # 用法：cp .env.example .env && 改 PORCH_IMAGE 后 docker compose up -d
 services:
-  flatnas:
+  porch:
     image: ${PORCH_IMAGE:-ghcr.io/mjy378283319/porch:latest}
     container_name: porch
     restart: unless-stopped

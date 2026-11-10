@@ -1,13 +1,16 @@
 # Porch · Unraid 专用 Compose
-# 在 Unraid 终端里：
-#   mkdir -p /mnt/user/appdata/porch && cd /mnt/user/appdata/porch
-#   curl -O https://raw.githubusercontent.com/<owner>/Porch/main/docker-compose.unraid.yml
-#   curl -o .env https://raw.githubusercontent.com/<owner>/Porch/main/.env.example
-#   docker compose -f docker-compose.unraid.yml up -d
 #
-# 或者直接用 Unraid 的“Compose Manager / Docker Compose”插件新建 Stack 粘贴本文件。
+# 仓库与镜像均为私有，raw 链接匿名打不开，取本文件用下面任一方式：
+#   1. 打开仓库页复制本文件内容，粘到 Unraid 的 Compose Manager 新建 Stack
+#   2. 从本地仓库用 scp / SMB 拷到 /mnt/user/appdata/porch/docker-compose.unraid.yml
+#
+# 首次部署前先登录镜像仓库（Token 需 read:packages）：
+#   docker login ghcr.io -u mjy378283319
+#
+# 然后在 /mnt/user/appdata/porch 下执行：
+#   docker compose -f docker-compose.unraid.yml up -d
 services:
-  flatnas:
+  porch:
     image: ${PORCH_IMAGE:-ghcr.io/mjy378283319/porch:latest}
     container_name: porch
     restart: unless-stopped
