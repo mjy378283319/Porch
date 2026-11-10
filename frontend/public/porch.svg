@@ -1,10 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-labelledby="t d">
-  <title id="t">Porch</title>
-  <desc id="d">A rounded window: left sidebar rail, top search bar, one large bright widget card and two smaller cards.</desc>
-  <rect width="128" height="128" rx="28" fill="#24445C"/>
-  <rect x="17" y="18" width="22" height="92" rx="7" fill="#7FA3BC"/>
-  <rect x="47" y="18" width="64" height="13" rx="6.5" fill="#F4EFE6"/>
-  <rect x="47" y="42" width="40" height="68" rx="10" fill="#F4EFE6"/>
-  <rect x="94" y="42" width="17" height="31" rx="6" fill="#7FA3BC"/>
-  <rect x="94" y="79" width="17" height="31" rx="6" fill="#7FA3BC"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-labelledby="porchTitle porchDesc">
+  <title id="porchTitle">Porch</title>
+  <desc id="porchDesc">A softly lit window: left sidebar rail, top search bar, one bright main widget card and two smaller cards.</desc>
+  <defs>
+    <linearGradient id="porchBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2F5A78"/>
+      <stop offset="1" stop-color="#1C3A50"/>
+    </linearGradient>
+    <linearGradient id="porchRail" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A4CADF"/>
+      <stop offset="1" stop-color="#6C93AD"/>
+    </linearGradient>
+    <linearGradient id="porchCard" x1="0" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.45" stop-color="#F8F3EA"/>
+      <stop offset="1" stop-color="#E5DAC9"/>
+    </linearGradient>
+    <linearGradient id="porchChip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A7CCE0"/>
+      <stop offset="1" stop-color="#7199B3"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#porchBg)"/>
+  <rect x="0.75" y="0.75" width="126.5" height="126.5" rx="27.25" fill="none" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="1.5"/>
+  <rect x="17" y="18" width="22" height="92" rx="8" fill="url(#porchRail)"/>
+  <rect x="21" y="21" width="3.5" height="86" rx="1.75" fill="#FFFFFF" fill-opacity="0.18"/>
+  <rect x="47" y="18" width="64" height="13" rx="6.5" fill="url(#porchCard)"/>
+  <rect x="47" y="44.5" width="40" height="68" rx="13" fill="#081824" fill-opacity="0.10"/>
+  <rect x="47" y="43.5" width="40" height="68" rx="13" fill="#081824" fill-opacity="0.10"/>
+  <rect x="47" y="42" width="40" height="68" rx="13" fill="url(#porchCard)"/>
+  <rect x="51" y="43.5" width="32" height="1.5" rx="0.75" fill="#FFFFFF" fill-opacity="0.8"/>
+  <rect x="94" y="41" width="17" height="32" rx="7" fill="url(#porchChip)"/>
+  <rect x="94" y="79" width="17" height="31" rx="7" fill="url(#porchChip)" fill-opacity="0.86"/>
+  <rect x="97" y="42.5" width="11" height="1.2" rx="0.6" fill="#FFFFFF" fill-opacity="0.45"/>
 </svg>
