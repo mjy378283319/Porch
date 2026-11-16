@@ -295,7 +295,8 @@
     "network": {
       "applyDefault": "デフォルトルールを適用",
       "reset": "デフォルトにリセット"
-    }
+    },
+    "copyFailed": "コピーできませんでした。リンクを手動でコピーしてください。"
   },
   "widgetTypes": {
     "clock": "時計",
@@ -679,7 +680,13 @@
     "containerWidgetAriaLabel": "容器管理组件",
     "note": "注",
     "statusLabel": "状态",
-    "amapApiKey": "高德 API Key"
+    "amapApiKey": "高德 API Key",
+    "browserHelperComms": "ブラウザヘルパー通信",
+    "browserHelperDesc": "Porch ブラウザヘルパーをインストールし、下のハンドシェイクリンクをコピーしてプラグインに読み込ませると、サイトとトークンが自動保存されます。以降は任意のページでアイコンをクリックするだけで保存できます。",
+    "helperNotDetected": "プラグインが未接続と表示される場合は、このページを開いたままアイコンをクリックして自動ペアリングしてください。",
+    "noLoginToken": "ログイントークンが見つかりません。先に Porch にログインすると、ここにハンドシェイクリンクが表示されます。",
+    "downloadBrowserPlugin": "ブラウザプラグインをダウンロード",
+    "removeRestriction": "制限を解除"
   },
   "networkIndicator": {
     "online": "オンライン",

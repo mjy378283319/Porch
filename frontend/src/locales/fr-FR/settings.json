@@ -295,7 +295,8 @@
     "network": {
       "applyDefault": "Appliquer les règles par défaut",
       "reset": "Réinitialiser par défaut"
-    }
+    },
+    "copyFailed": "Échec de la copie. Veuillez copier le lien manuellement."
   },
   "widgetTypes": {
     "clock": "Horloge",
@@ -679,7 +680,13 @@
     "containerWidgetAriaLabel": "容器管理组件",
     "note": "注",
     "statusLabel": "状态",
-    "amapApiKey": "高德 API Key"
+    "amapApiKey": "高德 API Key",
+    "browserHelperComms": "Communication de l'assistant navigateur",
+    "browserHelperDesc": "Installez l'assistant navigateur Porch, copiez le lien de handshake ci-dessous, puis laissez l'extension le lire pour enregistrer le site et le jeton. Ensuite, cliquez sur l'icône sur n'importe quelle page pour l'ajouter.",
+    "helperNotDetected": "Si l'assistant indique « Non connecté », restez sur cette page et cliquez sur l'icône de l'extension pour l'appairer.",
+    "noLoginToken": "Aucun jeton de connexion trouvé. Connectez-vous d'abord à Porch ; le lien de handshake apparaîtra ici.",
+    "downloadBrowserPlugin": "Télécharger le plugin navigateur",
+    "removeRestriction": "Supprimer la restriction"
   },
   "networkIndicator": {
     "online": "En ligne",

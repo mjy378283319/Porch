@@ -6,7 +6,6 @@ import NetworkIndicator from "./components/NetworkIndicator.vue";
 import { useMainStore } from "./stores/main";
 import type { CustomScript } from "@/types";
 import { useWindowScroll, useWindowSize } from "@vueuse/core";
-import { consumeQuickAdd } from "@/utils/quickAdd";
 
 const store = useMainStore();
 const { y } = useWindowScroll();
@@ -27,33 +26,6 @@ const pushSaveError = (message: string) => {
     saveErrorTimer = null;
   }, 6000);
 };
-
-// 快速收藏小书签：跳转回本站后把链接写入收藏夹第一个分类。
-// 小书签只做一次跳转，不在目标站点注入脚本，因此不会拖慢任何站点。
-const quickAddMessage = ref("");
-let quickAddTimer: number | null = null;
-
-const notifyQuickAdd = (message: string) => {
-  quickAddMessage.value = message;
-  if (quickAddTimer) window.clearTimeout(quickAddTimer);
-  quickAddTimer = window.setTimeout(() => {
-    quickAddMessage.value = "";
-    quickAddTimer = null;
-  }, 6000);
-};
-
-watch(
-  () => store.isClientReady,
-  (ready) => {
-    if (!ready) return;
-    const message = consumeQuickAdd({
-      getWidgets: () => store.widgets,
-      markDirty: () => store.markDirty(),
-    });
-    if (message) notifyQuickAdd(message);
-  },
-  { immediate: true },
-);
 
 // Auto-detect ultrawide screen
 const checkUltrawide = () => {
@@ -477,7 +449,9 @@ onMounted(() => {
 </script>
 
 <template>
-  
+  <!-- 隐藏握手标记：保留上游插件识别协议，界面不可见 -->
+  <div class="flatnas-handshake-signal" style="display: none !important"></div>
+
   <!-- Network Status Indicator -->
   <NetworkIndicator class="network-indicator-wrapper" />
 
@@ -591,17 +565,6 @@ onMounted(() => {
     >
       <div class="max-w-7xl mx-auto px-4 py-2 text-sm font-medium">
         {{ saveErrorMessage }}
-      </div>
-    </div>
-  </Transition>
-
-  <Transition name="slide-down">
-    <div
-      v-if="quickAddMessage"
-      class="fixed top-0 inset-x-0 z-[112] bg-emerald-500/95 text-white shadow-xl backdrop-blur-md border-b border-emerald-400/50 pt-[env(safe-area-inset-top)]"
-    >
-      <div class="max-w-7xl mx-auto px-4 py-2 text-sm font-medium">
-        {{ quickAddMessage }}
       </div>
     </div>
   </Transition>

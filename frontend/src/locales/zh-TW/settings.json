@@ -295,7 +295,8 @@
     "network": {
       "applyDefault": "套用預設規則",
       "reset": "重設為預設"
-    }
+    },
+    "copyFailed": "複製失敗，請手動複製連結"
   },
   "widgetTypes": {
     "clock": "時鐘",
@@ -679,7 +680,13 @@
     "containerWidgetAriaLabel": "容器管理组件",
     "note": "注",
     "statusLabel": "状态",
-    "amapApiKey": "高德 API Key"
+    "amapApiKey": "高德 API Key",
+    "browserHelperComms": "瀏覽器助手通訊",
+    "browserHelperDesc": "安裝 Porch 瀏覽器助手後，點擊「複製握手連結」再由外掛讀取，即可自動儲存站點與權杖；之後在任意網頁點外掛圖示即可收藏目前頁。",
+    "helperNotDetected": "如果外掛提示未連線，請先停留在這個頁面，再點擊瀏覽器助手圖示進行自動配對。",
+    "noLoginToken": "目前未偵測到登入權杖。請先登入 Porch，隨後這裡會自動產生瀏覽器助手握手連結。",
+    "downloadBrowserPlugin": "下載瀏覽器外掛",
+    "removeRestriction": "解除限制"
   },
   "networkIndicator": {
     "online": "線上",

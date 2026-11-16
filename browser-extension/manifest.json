@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Porch 浏览器助手",
+  "version": "1.0.0",
+  "description": "一键把当前网页收藏到 Porch，并可按需解除 iframe 嵌入限制。握手协议兼容原 FlatNas-Helper。",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "webNavigation",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "收藏到 Porch",
+    "default_icon": {
+      "128": "icon.png",
+      "48": "icon.png"
+    }
+  },
+  "icons": {
+    "128": "icon.png",
+    "48": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

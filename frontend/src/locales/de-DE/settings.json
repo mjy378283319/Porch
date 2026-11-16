@@ -295,7 +295,8 @@
     "network": {
       "applyDefault": "Standardregeln anwenden",
       "reset": "Auf Standard zurücksetzen"
-    }
+    },
+    "copyFailed": "Kopieren fehlgeschlagen. Bitte kopieren Sie den Link manuell."
   },
   "widgetTypes": {
     "clock": "Uhr",
@@ -679,7 +680,13 @@
     "containerWidgetAriaLabel": "容器管理组件",
     "note": "注",
     "statusLabel": "状态",
-    "amapApiKey": "高德 API Key"
+    "amapApiKey": "高德 API Key",
+    "browserHelperComms": "Browser-Helfer-Kommunikation",
+    "browserHelperDesc": "Installieren Sie den Porch-Browserhelfer, kopieren Sie unten den Handshake-Link und lesen Sie ihn mit der Erweiterung, um Site und Token automatisch zu speichern. Danach genügt ein Klick auf das Symbol auf beliebigen Seiten.",
+    "helperNotDetected": "Wenn der Helfer „Nicht verbunden“ meldet, bleiben Sie auf dieser Seite und klicken Sie auf das Erweiterungssymbol.",
+    "noLoginToken": "Kein Login-Token gefunden. Melden Sie sich zuerst bei Porch an; der Handshake-Link erscheint dann automatisch.",
+    "downloadBrowserPlugin": "Browser-Plugin herunterladen",
+    "removeRestriction": "Einschränkung aufheben"
   },
   "networkIndicator": {
     "online": "Online",

@@ -1151,6 +1151,47 @@ const getWebhookUrl = () => {
   return toApiUrl("/api/webhook/lucky/stun");
 };
 
+// 保留上游握手协议字段名，兼容 FlatNas-Helper / Porch 浏览器助手。
+// 这些键只出现在 URL hash 与隐藏标记里，不显示给用户。
+const browserHelperHandshakeLink = computed(() => {
+  if (typeof window === "undefined") return "";
+  const token = localStorage.getItem("flat-nas-token") || "";
+  if (!token) return "";
+
+  const origin = window.location.origin;
+  const url = new URL(`${origin}/`);
+  const params = new URLSearchParams();
+  params.set("flatnas-helper-handshake", "1");
+  params.set("origin", origin);
+  params.set("token", token);
+  params.set("source", "open-center");
+  url.hash = params.toString();
+  return url.toString();
+});
+
+const copyBrowserHelperHandshakeLink = async () => {
+  const link = browserHelperHandshakeLink.value;
+  if (!link) {
+    alert(t("settings.messages.loginFirst"));
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(link);
+    alert(t("settings.messages.copiedHandshake"));
+  } catch {
+    alert(t("settings.messages.copyFailed"));
+  }
+};
+
+const openBrowserHelperHandshakeLink = () => {
+  const link = browserHelperHandshakeLink.value;
+  if (!link) {
+    alert(t("settings.messages.loginFirst"));
+    return;
+  }
+  window.open(link, "_blank", "noopener,noreferrer");
+};
+
 const copyWebhookUrl = () => {
   navigator.clipboard.writeText(getWebhookUrl()).then(() => {
     alert(t('settings.messages.copiedWebhook'));
@@ -1836,9 +1877,11 @@ provide(
   addIframeWidget,
   addMusicWidget,
   applyLatencyThreshold,
+  browserHelperHandshakeLink,
   canManageUsers,
   checkDockerConnection,
   confirmTempInput,
+  copyBrowserHelperHandshakeLink,
   copyWebhookUrl,
   daoliyuLogo,
   daylightMaskPercent,
@@ -1894,6 +1937,7 @@ provide(
   onLatencyThresholdInput,
   onMobileDockerDisplayChange,
   onMobileSystemStatusDisplayChange,
+  openBrowserHelperHandshakeLink,
   openRenameModal,
   passwordInput,
   removeWidget,
