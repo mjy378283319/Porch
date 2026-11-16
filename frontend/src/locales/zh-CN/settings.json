@@ -682,7 +682,7 @@
     "statusLabel": "状态",
     "amapApiKey": "高德 API Key",
     "browserHelperComms": "浏览器助手通信",
-    "browserHelperDesc": "安装 Porch 浏览器助手后，点击「复制握手链接」再用插件读取，即可自动保存站点与令牌；之后在任意网页点插件图标即可收藏当前页。",
+    "browserHelperDesc": "为 `flatnas-helper` 生成专用握手链接。插件在当前页点击图标时会优先读取它并自动保存站点与令牌。",
     "helperNotDetected": "如果插件提示未连接，请先停留在这个页面，再点击浏览器助手图标进行自动配对。",
     "noLoginToken": "当前未检测到登录令牌。请先登录 Porch，随后这里会自动生成浏览器助手握手链接。",
     "downloadBrowserPlugin": "下载浏览器插件",

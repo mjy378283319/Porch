@@ -8,7 +8,7 @@ const defaultMessages = {
   settings: zhCNSettings,
 };
 
-export const SUPPORTED_LOCALES = ["zh-CN", "en-US", "ja-JP", "de-DE", "zh-TW", "fr-FR", "es-ES"] as const;
+export const SUPPORTED_LOCALES = ["zh-CN"] as const;
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 
 export const DEFAULT_LOCALE: SupportedLocale = "zh-CN";

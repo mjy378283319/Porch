@@ -26,74 +26,24 @@ export const useI18nStore = defineStore("i18n", () => {
   const isRTL = computed(() => false);
 
   /**
-   * 切换语言并动态加载语言包
-   * @param persist - 是否持久化到 localStorage（用户手动选择时 true，初始化自动检测时 false）
+   * 自用版固定简体中文。保留接口签名，避免其它调用点改动。
    */
-  async function setLocale(locale: SupportedLocale, persist = false) {
-    if (locale === currentLocale.value) return;
-    if (!SUPPORTED_LOCALES.includes(locale)) {
-      console.warn(`Unsupported locale: ${locale}`);
-      return;
+  async function setLocale(_locale: SupportedLocale, _persist = false) {
+    currentLocale.value = DEFAULT_LOCALE;
+    const localeRef = i18n.locale;
+    if (typeof localeRef !== "string") {
+      (localeRef as { value: string }).value = DEFAULT_LOCALE;
     }
-
-    loading.value = true;
+    localStorage.removeItem("porch-locale");
+    loading.value = false;
     error.value = null;
-
-    try {
-      // 如果语言包未加载，动态 import（common + settings）
-      const messages = (i18n.messages as { value: Record<string, unknown> }).value;
-      if (!messages[locale]) {
-        const [common, settings] = await Promise.all([
-          import(`@/locales/${locale}/common.json`),
-          import(`@/locales/${locale}/settings.json`),
-        ]);
-        i18n.setLocaleMessage(locale, {
-          common: common.default,
-          settings: settings.default,
-        });
-      }
-
-      currentLocale.value = locale;
-      const localeRef = i18n.locale;
-      if (typeof localeRef !== "string") {
-        (localeRef as { value: string }).value = locale;
-      }
-
-      // 仅用户手动切换时持久化到 localStorage
-      if (persist) {
-        localStorage.setItem("porch-locale", locale);
-      }
-    } catch (e) {
-      error.value = (e as Error).message;
-      console.error("Failed to load locale:", e);
-    } finally {
-      loading.value = false;
-    }
   }
 
   /**
-   * 初始化：用户手动选择 > 浏览器语言（首次访问）> 默认中文
+   * 清掉旧版本残留的语言选择，固定中文。
    */
-  function initLocale(savedLocale?: string) {
-    const stored = localStorage.getItem("porch-locale");
-    const browserLang = navigator.language;
-    let locale: string;
-
-    if (savedLocale) {
-      locale = savedLocale;
-    } else if (stored && SUPPORTED_LOCALES.includes(stored as SupportedLocale)) {
-      // 用户手动选择的语言优先
-      locale = stored;
-    } else if (browserLang && SUPPORTED_LOCALES.includes(browserLang as SupportedLocale)) {
-      // 首次访问时匹配浏览器语言
-      locale = browserLang;
-    } else {
-      locale = DEFAULT_LOCALE;
-    }
-
-    if (SUPPORTED_LOCALES.includes(locale as SupportedLocale)) {
-      void setLocale(locale as SupportedLocale, false);
-    }
+  function initLocale(_savedLocale?: string) {
+    void setLocale(DEFAULT_LOCALE, false);
   }
 
   return {

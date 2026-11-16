@@ -90,7 +90,7 @@ describe("i18n 语言包完整性验证", () => {
 
   // ── 3. 键结构一致性 (以 zh-CN 为基准) ──
 
-  describe("键结构一致性 — common.json", () => {
+  if (allLocales.length > 1) describe("键结构一致性 — common.json", () => {
     for (const locale of allLocales) {
       if (locale === "zh-CN") continue;
       it(`${locale} 的 common.json 键应与 zh-CN 一致`, () => {
@@ -103,7 +103,7 @@ describe("i18n 语言包完整性验证", () => {
     }
   });
 
-  describe("键结构一致性 — settings.json", () => {
+  if (allLocales.length > 1) describe("键结构一致性 — settings.json", () => {
     for (const locale of allLocales) {
       if (locale === "zh-CN") continue;
       it(`${locale} 的 settings.json 键应与 zh-CN 一致`, () => {
@@ -137,9 +137,8 @@ describe("i18n 语言包完整性验证", () => {
 
   // ── 5. zh-CN 值不应被原样复制到其他语言 (翻译不应等于原文) ──
 
-  describe("翻译值不应与 zh-CN 完全相同（非中文语言）", () => {
-    const nonChineseLocales = allLocales.filter((l) => l !== "zh-CN" && l !== "zh-TW");
-
+  const nonChineseLocales = allLocales.filter((l) => l !== "zh-CN" && l !== "zh-TW");
+  if (nonChineseLocales.length > 0) describe("翻译值不应与 zh-CN 完全相同（非中文语言）", () => {
     for (const locale of nonChineseLocales) {
       for (const file of localeFiles) {
         const refFile = file as string;

@@ -3,7 +3,6 @@ import { computed, onMounted, onUnmounted, provide, reactive, ref, watch } from 
 import { useStorage } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import { useMainStore } from "../stores/main";
-import { useI18nStore, type SupportedLocale } from "@/stores/i18n";
 import type { WidgetConfig, NavGroup, NavItem } from "@/types";
 import IconUploader from "./IconUploader.vue";
 import WallpaperLibrary from "./WallpaperLibrary.vue";
@@ -17,7 +16,6 @@ import NetworkPanel from "./settings/NetworkPanel.vue";
 import LuckyStunPanel from "./settings/LuckyStunPanel.vue";
 import AccountPanel from "./settings/AccountPanel.vue";
 import AboutPanel from "./settings/AboutPanel.vue";
-import LanguagePanel from "./settings/LanguagePanel.vue";
 import DockerWidget from "./DockerWidget.vue";
 import ProxyToggle from "./ProxyToggle.vue";
 import SystemStatusWidget from "./SystemStatusWidget.vue";
@@ -34,27 +32,6 @@ const { t } = useI18n();
 const props = defineProps<{ show: boolean }>();
 const emit = defineEmits(["update:show"]);
 const store = useMainStore();
-const i18nStore = useI18nStore();
-
-const LOCALE_LABELS: Record<SupportedLocale, string> = {
-  "zh-CN": "简体中文",
-  "en-US": "English",
-  "ja-JP": "日本語",
-  "de-DE": "Deutsch",
-  "zh-TW": "繁體中文",
-  "fr-FR": "Français",
-  "es-ES": "Español",
-};
-
-const LOCALE_FLAGS: Record<SupportedLocale, string> = {
-  "zh-CN": "🇨🇳",
-  "en-US": "🇺🇸",
-  "ja-JP": "🇯🇵",
-  "de-DE": "🇩🇪",
-  "zh-TW": "🇹🇼",
-  "fr-FR": "🇫🇷",
-  "es-ES": "🇪🇸",
-};
 
 // 自动保存所有设置修改
 watch(
@@ -1867,8 +1844,6 @@ provide(
   SETTINGS_CTX,
   reactive({
     DEFAULT_LATENCY_THRESHOLD_MS,
-  LOCALE_FLAGS,
-  LOCALE_LABELS,
   activeTab,
   addAmapWeatherWidget,
   addCountUpWidget,
@@ -1909,7 +1884,6 @@ provide(
   handleUploadLicense,
   handleWallpaperSelect,
   hasAdminAccess,
-  i18nStore,
   isDockerComponentCreated,
   isDockerSystemEnabled,
   isExportingDockerLogs,
@@ -2151,17 +2125,6 @@ provide(
           >
             {{ $t('settings.tabs.about') }}
           </button>
-          <button
-            @click="activeTab = 'language'"
-            :class="
-              activeTab === 'language'
-                ? 'selected-outline text-gray-900'
-                : 'border border-transparent text-gray-600 hover:bg-gray-50'
-            "
-            class="whitespace-nowrap md:whitespace-normal w-auto md:w-full shrink-0 text-left px-3 py-1.5 rounded-lg text-sm transition-colors"
-          >
-            {{ $t('settings.tabs.language') }}
-          </button>
         </nav>
         <div v-if="iconSrc" class="mt-auto px-3 pb-3 hidden md:flex justify-center">
           <img :src="iconSrc" class="w-1/4 h-auto rounded-lg shadow-sm" alt="Custom Icon" />
@@ -2178,7 +2141,6 @@ provide(
           <LuckyStunPanel />
           <AccountPanel />
           <AboutPanel />
-          <LanguagePanel />
         </div>
       </div>
     </div>
