@@ -41,7 +41,7 @@
 - 多端实时同步：Socket.IO + 原生 WebSocket，带配置版本号与冲突解决弹窗
 - 认证：JWT(HS256) + bcrypt，单用户（默认 `admin`/`admin`）与多用户两种模式
 - 个性化：内置图标库、图标上传、壁纸库与轮换、自定义 CSS/JS（支持 `<mobile>`/`<dark>` 等增强语法）
-- 7 种界面语言：简中、繁中、English、日本語、Deutsch、Français、Español
+- 界面语言：仅简体中文（自用版，已移除多语言切换）
 - 数据本地化：配置全在 `server/data/data.json`，支持版本快照与回滚
 
 ## 快速开始
