@@ -1,42 +1,40 @@
 {
+  "name": "Porch 专用助手",
+  "version": "3.3",
   "manifest_version": 3,
-  "name": "Porch 浏览器助手",
-  "version": "1.0.0",
-  "description": "一键把当前网页收藏到 Porch，并可按需解除 iframe 嵌入限制。握手协议兼容原 FlatNas-Helper。",
+  "description": "仅在指定的 NAS 地址解除 iframe 限制，并提供右键菜单发送功能。",
   "permissions": [
+    "declarativeNetRequest",
     "storage",
-    "activeTab",
     "tabs",
-    "webNavigation",
-    "declarativeNetRequest"
+    "scripting",
+    "activeTab",
+    "contextMenus"
   ],
   "host_permissions": [
     "<all_urls>"
   ],
   "background": {
-    "service_worker": "background.js"
-  },
-  "action": {
-    "default_popup": "popup.html",
-    "default_title": "收藏到 Porch",
-    "default_icon": {
-      "128": "icon.png",
-      "48": "icon.png"
-    }
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
   },
   "icons": {
-    "128": "icon.png",
-    "48": "icon.png"
+    "16": "assets/logo.png",
+    "48": "assets/logo.png",
+    "128": "assets/logo.png"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content.js"
-      ],
-      "run_at": "document_idle"
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_title": "设置 Porch 地址",
+    "default_icon": "assets/logo.png"
+  },
+  "commands": {
+    "quick-add-bookmark": {
+      "suggested_key": {
+        "default": "Alt+Shift+F",
+        "mac": "Alt+Shift+F"
+      },
+      "description": "一键添加当前页到 Porch"
     }
-  ]
+  }
 }
