@@ -27,6 +27,7 @@ var (
 	BackgroundsDir       string
 	MobileBackgroundsDir string
 	IconCacheDir         string
+	SharedIconsDir       string
 	PublicDir            string
 	ConfigVersionsDir    string
 	SecretKey            []byte
@@ -75,6 +76,7 @@ func Init() {
 	BackgroundsDir = filepath.Join(BaseDir, "server", "PC")
 	MobileBackgroundsDir = filepath.Join(BaseDir, "server", "APP")
 	IconCacheDir = filepath.Join(DataDir, "icon-cache")
+	SharedIconsDir = filepath.Join(DataDir, "shared-icons")
 	// PublicDir 是后端对外提供前端静态文件的运行目录。
 	// 源素材请维护在 frontend/public，构建时会复制到这里；不要直接把这里当素材源目录编辑。
 	PublicDir = filepath.Join(BaseDir, "server", "public")
@@ -94,7 +96,7 @@ func dirExists(path string) bool {
 }
 
 func ensureDirs() {
-	dirs := []string{DataDir, UsersDir, DocDir, MusicDir, BackgroundsDir, MobileBackgroundsDir, IconCacheDir, PublicDir, ConfigVersionsDir}
+	dirs := []string{DataDir, UsersDir, DocDir, MusicDir, BackgroundsDir, MobileBackgroundsDir, IconCacheDir, SharedIconsDir, PublicDir, ConfigVersionsDir}
 	for _, dir := range dirs {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			log.Printf("Failed to create dir %s: %v", dir, err)

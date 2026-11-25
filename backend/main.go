@@ -46,6 +46,7 @@ func staticCacheControlForPath(reqPath string) string {
 		strings.HasPrefix(reqPath, "/backgrounds/"),
 		strings.HasPrefix(reqPath, "/mobile_backgrounds/"),
 		strings.HasPrefix(reqPath, "/icon-cache/"),
+		strings.HasPrefix(reqPath, "/shared-icons/"),
 		strings.HasPrefix(reqPath, "/public/"),
 		reqPath == "/favicon.ico":
 		return "public, max-age=604800, stale-while-revalidate=86400"
@@ -256,6 +257,7 @@ func main() {
 	r.Static(mountPath(basePath, "/backgrounds"), config.BackgroundsDir)
 	r.Static(mountPath(basePath, "/mobile_backgrounds"), config.MobileBackgroundsDir)
 	r.Static(mountPath(basePath, "/icon-cache"), config.IconCacheDir)
+	r.Static(mountPath(basePath, "/shared-icons"), config.SharedIconsDir)
 	r.Static(mountPath(basePath, "/public"), config.PublicDir)
 	r.Any(proxyPath, handlers.ProxyRequest)
 
@@ -329,6 +331,7 @@ func main() {
 		api.GET("/ali-icons", handlers.GetAliIcons)
 		api.GET("/get-icon-base64", handlers.GetIconBase64)
 		api.POST("/icon-cache", handlers.CacheIcon)
+		api.GET("/shared-icons", handlers.ListSharedIcons) // 公开只读，便于外部应用枚举共享图标
 
 		// Amap Proxy Routes
 		api.GET("/amap/weather", handlers.GetAmapWeather)
@@ -390,6 +393,10 @@ func main() {
 			authorized.POST("/mobile_backgrounds/upload", handlers.UploadMobileBackground)
 			authorized.POST("/music/upload", handlers.UploadMusic) // Added Music Upload
 			authorized.DELETE("/music", handlers.DeleteMusic)      // Added Music Delete
+
+			// Shared Icons Management
+			authorized.POST("/shared-icons/upload", handlers.UploadSharedIcons)
+			authorized.DELETE("/shared-icons/:name", handlers.DeleteSharedIcon)
 
 			// Transfer
 			authorized.GET("/transfer/items", handlers.GetTransferItems)

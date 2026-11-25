@@ -15,6 +15,7 @@ import UniversalWindowPanel from "./settings/UniversalWindowPanel.vue";
 import NetworkPanel from "./settings/NetworkPanel.vue";
 import LuckyStunPanel from "./settings/LuckyStunPanel.vue";
 import AccountPanel from "./settings/AccountPanel.vue";
+import IconPanel from "./settings/IconPanel.vue";
 import AboutPanel from "./settings/AboutPanel.vue";
 import DockerWidget from "./DockerWidget.vue";
 import ProxyToggle from "./ProxyToggle.vue";
@@ -2115,6 +2116,17 @@ provide(
             {{ $t('settings.tabs.luckyStun') }}
           </button>
           <button
+            @click="activeTab = 'icons'"
+            :class="
+              activeTab === 'icons'
+                ? 'selected-outline text-gray-900'
+                : 'border border-transparent text-gray-600 hover:bg-gray-50'
+            "
+            class="whitespace-nowrap md:whitespace-normal w-auto md:w-full shrink-0 text-left px-3 py-1.5 rounded-lg text-sm transition-colors"
+          >
+            {{ $t('settings.tabs.icons') }}
+          </button>
+          <button
             @click="activeTab = 'about'"
             :class="
               activeTab === 'about'
@@ -2140,6 +2152,7 @@ provide(
           <NetworkPanel />
           <LuckyStunPanel />
           <AccountPanel />
+          <IconPanel />
           <AboutPanel />
         </div>
       </div>
